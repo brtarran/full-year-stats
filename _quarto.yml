@@ -3,11 +3,7 @@ project:
 
 website:
   title: "Full-year-stats"
-  navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+
 
 format:
   html:

@@ -4,6 +4,7 @@ execute:
   eval: true
   echo: false
   warning: false
+embed-resources: true
 ---
 
 ```{r}
