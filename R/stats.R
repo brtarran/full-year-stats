@@ -16,8 +16,8 @@ load_data <- function(file_path, sheet_name) {
   return(df)
 }
 
-# Plots
 
+# Plots
 
 # Box office
 
