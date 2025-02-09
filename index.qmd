@@ -1,0 +1,77 @@
+---
+title: "2024 screen sector statistics summary"
+execute: 
+  eval: true
+  echo: false
+  warning: false
+---
+
+```{r}
+#| label: load-functions
+#| file: R/stats.R
+```
+
+```{r}
+#| label: uk-box-office
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+file_path <- here::here('data/stats.xlsx')
+sheet_name <- 'uk_box_office'
+df <- load_data(file_path, sheet_name)
+uk_box_office()
+```
+
+```{r}
+#| label: uk-admissions
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+file_path <- here::here('data/stats.xlsx')
+sheet_name <- 'uk_admissions'
+df <- load_data(file_path, sheet_name)
+uk_admissions()
+```
+
+```{r}
+#| label: uk-admissions-month
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+file_path <- here::here('data/stats.xlsx')
+sheet_name <- 'uk_admissions'
+df <- load_data(file_path, sheet_name)
+uk_admissions_month()
+```
+
+```{r}
+#| label: uk-roi-box-office
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+file_path <- here::here('data/stats.xlsx')
+sheet_name <- 'uk_roi_box_office'
+df <- load_data(file_path, sheet_name)
+uk_roi_box_office()
+```
+
+```{r}
+#| label: uk-market-share
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+file_path <- here::here('data/stats.xlsx')
+sheet_name <- 'uk_film_share'
+df <- load_data(file_path, sheet_name)
+uk_market_share()
+```
