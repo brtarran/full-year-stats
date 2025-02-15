@@ -101,3 +101,28 @@ sheet_name <- 'uk_film_share'
 df <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
+
+```{r}
+#| label: all-production-first
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_production_detail'
+df <- load_data(file_path, sheet_name)
+all_production_first()
+```
+
+```{r}
+#| label: all-production-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_production_detail'
+df <- load_data(file_path, sheet_name)
+all_production_revised()
+```
+
