@@ -37,14 +37,18 @@ uk_box_office <- function() {
 uk_roi_box_office <- function() {
   ggplot(df, aes(x = year, y = uk_roi_box_office_m)) +
     geom_bar(stat = 'identity', fill = '#783df6') +  
-    geom_text(aes(label = scales::comma(uk_roi_box_office_m)), hjust = 1.2, vjust = 1.5, color = 'white') + 
+    geom_text(aes(label = scales::comma(uk_roi_box_office_m)), vjust = 1.5, color = 'white') + 
     labs(
       title = 'UK and Republic of Ireland box office, £ million', 
-      subtitle = 'All films released in calendar year, excluding event titles',
+      subtitle = "<span style='color:#783df6'>All films</span> released in calendar year, excluding event titles",
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
-    theme_minimal()
+    theme_minimal() +
+    theme(
+      legend.position = 'none',
+      plot.subtitle = element_textbox_simple()
+    )
 }
 
 uk_market_share <- function() {
@@ -62,18 +66,18 @@ uk_market_share <- function() {
     geom_bar(aes(fill = ifelse(film_type == "all_uk_qualifying", "all_uk_qualifying", NA)), 
              stat = 'identity', position = 'identity', na.rm = TRUE) + 
     # Text labels for relevant bars 
-    geom_text(data = df_filtered %>% filter(film_type %in% c("all_titles", "all_uk_qualifying")), 
-              aes(label = scales::comma(round(box_office_m, 0)), hjust = 1.2, vjust = 1.5),
+    geom_text(data = df_filtered %>% filter(film_type == "all_uk_qualifying"), 
+              aes(label = scales::comma(round(box_office_m, 0)), vjust = 1.5),
               color = 'white') +
     labs(
       title = 'UK and Republic of Ireland box office, £ million',
-      subtitle = "For <span style='color:#783df6'>**all films**</span> and 
-                  <span style='color:#1197FF'>**all UK qualifying films**</span>.",
+      subtitle = "For <span style='color:#1197FF'>**all UK qualifying films**</span> 
+                  released in calendar year, excluding event titles",
       x = 'Year',
       y = '',
       fill = 'Film type') +
     scale_y_continuous(labels = scales::comma_format()) +
-    scale_fill_manual(values = c('all_titles' = '#783df6', 
+    scale_fill_manual(values = c('all_titles' = 'grey', 
                                  'all_uk_qualifying' = '#1197FF'), 
                       na.value = "transparent") + 
     theme_minimal() +
@@ -101,23 +105,59 @@ uk_market_share_indie <- function() {
     geom_bar(aes(fill = ifelse(film_type == "uk_independent", "uk_independent", NA)), 
              stat = 'identity', position = 'identity', na.rm = TRUE) + 
     # Text labels for relevant bars
-    geom_text(data = df_filtered %>% filter(film_type %in% c("all_titles", "all_uk_qualifying")), 
-              aes(label = scales::comma(round(box_office_m, 0)), hjust = 1.2, vjust = 1.5),
-              color = 'white') +
     geom_text(data = df_filtered %>% filter(film_type == "uk_independent"), 
-              aes(label = scales::comma(round(box_office_m, 0)), hjust = -0.9, vjust = -0.5),
+              aes(label = scales::comma(round(box_office_m, 0)), vjust = -0.5),
               color = '#e50076') +
     labs(
       title = 'UK and Republic of Ireland box office, £ million',
-      subtitle = "For <span style='color:#783df6'>**all films**</span>, 
-                  <span style='color:#1197FF'>**UK qualifying films**</span> 
-                  and <span style='color:#e50076'>**UK independent films**</span>.",
+      subtitle = "For <span style='color:#e50076'>**all UK independent films**</span> 
+                  released in calendar year, excluding event titles",
       x = 'Year',
       y = '',
       fill = 'Film type') +
     scale_y_continuous(labels = scales::comma_format()) +
-    scale_fill_manual(values = c('all_titles' = '#783df6', 
-                                 'all_uk_qualifying' = '#1197FF',
+    scale_fill_manual(values = c('all_titles' = 'grey', 
+                                 'all_uk_qualifying' = 'lightgrey',
+                                 'uk_independent' = '#e50076'), 
+                      na.value = "transparent") + 
+    theme_minimal() +
+    theme(
+      legend.position = 'none',
+      plot.subtitle = element_textbox_simple()
+    )
+}
+
+uk_market_share_percent <- function() {
+  df$year <- as.numeric(as.character(df$year))
+
+  last_5_years <- max(df$year, na.rm = TRUE) - 5
+  df_filtered <- df %>%
+    filter(year >= last_5_years)
+
+  ggplot(df_filtered, aes(x = factor(year), y = market_share_percent)) +
+    # First layer: all films
+    geom_bar(aes(fill = ifelse(film_type == "all_titles", "all_titles", NA)), 
+             stat = 'identity', position = 'identity', na.rm = TRUE) +
+    # Second layer: all UK qualifying films (overlaid)
+    geom_bar(aes(fill = ifelse(film_type == "other_uk_qualifying", "other_uk_qualifying", NA)), 
+             stat = 'identity', position = 'identity', na.rm = TRUE) + 
+    # Third layer: uk independent films (overlaid)
+    geom_bar(aes(fill = ifelse(film_type == "uk_independent", "uk_independent", NA)), 
+             stat = 'identity', position = 'identity', na.rm = TRUE) + 
+    # Text labels for relevant bars
+    geom_text(data = df_filtered %>% filter(film_type %in% c("other_uk_qualifying", "uk_independent")), 
+              aes(label = scales::comma(round(market_share_percent, 0)), vjust = 1.5),
+              color = 'white') +
+    labs(
+      title = 'Share of UK and Republic of Ireland box office, %',
+      subtitle = "For <span style='color:#e50076'>**all UK independent films**</span> 
+                  and <span style='color:#1197FF'>**other UK qualifying films**</span>",
+      x = 'Year',
+      y = '',
+      fill = 'Film type') +
+    scale_y_continuous(labels = scales::comma_format()) +
+    scale_fill_manual(values = c('all_titles' = 'grey', 
+                                 'other_uk_qualifying' = '#1197FF',
                                  'uk_independent' = '#e50076'), 
                       na.value = "transparent") + 
     theme_minimal() +
