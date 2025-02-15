@@ -21,6 +21,7 @@ load_data <- function(file_path, sheet_name) {
 
 # Box office
 
+
 uk_box_office <- function() {
   ggplot(df, aes(x = year, y = uk_box_office_m)) +
     geom_bar(stat = 'identity', fill = '#e50076') +  
@@ -33,6 +34,7 @@ uk_box_office <- function() {
     scale_y_continuous(labels = scales::comma_format()) + 
     theme_minimal()
 }
+
 
 uk_roi_box_office <- function() {
   ggplot(df, aes(x = year, y = uk_roi_box_office_m)) +
@@ -50,6 +52,7 @@ uk_roi_box_office <- function() {
       plot.subtitle = element_textbox_simple()
     )
 }
+
 
 uk_market_share <- function() {
   df$year <- as.numeric(as.character(df$year))
@@ -86,6 +89,7 @@ uk_market_share <- function() {
       plot.subtitle = element_textbox_simple()
     )
 }
+
 
 uk_market_share_indie <- function() {
   df$year <- as.numeric(as.character(df$year))
@@ -127,6 +131,7 @@ uk_market_share_indie <- function() {
     )
 }
 
+
 uk_market_share_percent <- function() {
   df$year <- as.numeric(as.character(df$year))
 
@@ -135,18 +140,17 @@ uk_market_share_percent <- function() {
     filter(year >= last_5_years)
 
   ggplot(df_filtered, aes(x = factor(year), y = market_share_percent)) +
-    # First layer: all films
-    geom_bar(aes(fill = ifelse(film_type == "all_titles", "all_titles", NA)), 
+    # Layer 1: All films (no stacking)
+    geom_bar(aes(fill = "all_titles"), 
              stat = 'identity', position = 'identity', na.rm = TRUE) +
-    # Second layer: all UK qualifying films (overlaid)
-    geom_bar(aes(fill = ifelse(film_type == "other_uk_qualifying", "other_uk_qualifying", NA)), 
-             stat = 'identity', position = 'identity', na.rm = TRUE) + 
-    # Third layer: uk independent films (overlaid)
-    geom_bar(aes(fill = ifelse(film_type == "uk_independent", "uk_independent", NA)), 
-             stat = 'identity', position = 'identity', na.rm = TRUE) + 
-    # Text labels for relevant bars
+    # Layer 2: Stacked bars for uk_independent and other_uk_qualifying (stacked on top of all_titles)
+    geom_bar(data = df_filtered %>% filter(film_type %in% c("other_uk_qualifying", "uk_independent")), 
+             aes(fill = film_type), 
+             stat = 'identity', position = 'stack', na.rm = TRUE) + 
+    # Text labels for relevant bars (only for uk_independent and other_uk_qualifying)
     geom_text(data = df_filtered %>% filter(film_type %in% c("other_uk_qualifying", "uk_independent")), 
-              aes(label = scales::comma(round(market_share_percent, 0)), vjust = 1.5),
+              aes(label = scales::comma(round(market_share_percent, 0))), 
+              position = position_stack(vjust = 0.5),
               color = 'white') +
     labs(
       title = 'Share of UK and Republic of Ireland box office, %',
@@ -155,7 +159,7 @@ uk_market_share_percent <- function() {
       x = 'Year',
       y = '',
       fill = 'Film type') +
-    scale_y_continuous(labels = scales::comma_format()) +
+    scale_y_continuous(labels = function(x) paste0(x, "%")) +
     scale_fill_manual(values = c('all_titles' = 'grey', 
                                  'other_uk_qualifying' = '#1197FF',
                                  'uk_independent' = '#e50076'), 
@@ -166,6 +170,7 @@ uk_market_share_percent <- function() {
       plot.subtitle = element_textbox_simple()
     )
 }
+
 
 # Admissions
 
@@ -185,6 +190,7 @@ uk_admissions <- function() {
     scale_y_continuous(labels = scales::comma_format()) + 
     theme_minimal()
 }
+
 
 uk_admissions_month <- function() {
   df <- df %>%
@@ -259,7 +265,8 @@ all_production_first <- function() {
               color = 'white', vjust = 1.5) + 
     labs(
       title = 'UK production spend, £ million', 
-      subtitle = "For film and HETV starting principal photography in calendar year", 
+      subtitle = "For film and HETV starting principal photography in calendar year, 
+                  <span style='color:#783df6'>**first reported**</span>", 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -269,6 +276,7 @@ all_production_first <- function() {
       plot.subtitle = element_textbox_simple()
     )
 }
+
 
 all_production_revised <- function() {
   df_revised <- df %>%
@@ -300,7 +308,7 @@ all_production_revised <- function() {
 
   # Create the plot
   ggplot(df_total_revised, aes(x = year, y = total_spend)) +
-    geom_bar(stat = 'identity', fill = 'grey') +  
+    geom_bar(stat = 'identity', fill = 'darkgrey') +  
     # Add total spend labels for each year at the top of the stacked bars
     geom_text(aes(label = scales::comma(round(total_spend, 0))),
               color = 'white', vjust = 1.5) +  # Position total labels slightly above the top of the bars
@@ -310,7 +318,9 @@ all_production_revised <- function() {
               color = 'white', vjust = 1.5) + 
     labs(
       title = 'UK production spend, £ million', 
-      subtitle = "For film and HETV starting principal photography in calendar year", 
+      subtitle = "For film and HETV starting principal photography in calendar year, 
+                  <span style='color:#783df6'>**first reported**</span> and 
+                  <span style='color:darkgrey'>**revised**</span>",
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -321,135 +331,74 @@ all_production_revised <- function() {
     )
 }
 
-# all_production_first <- function() {
-#   df_filtered <- df %>%
-#     filter(production_type == 'all') %>%
-#     group_by(year, category) %>%
-#     filter(status == 'first_reported') %>%
-#     ungroup()
 
-#   ggplot(df_filtered, aes(x = year, y = UK_spend_m, fill = category)) +
-#     geom_bar(stat = 'identity') +  
-#     geom_text(aes(label = scales::comma(round(UK_spend_m, 0))), 
-#               position = position_stack(vjust = 0.9), 
-#               color = 'white') + 
-#     labs(
-#       title = 'UK production spend, £ million', 
-#       subtitle = "For <span style='color:#e50076'>**film**</span> 
-#                   and <span style='color:#1197FF'>**HETV**</span> 
-#                   starting principal photography in calendar year", 
-#       x = 'Year', 
-#       y = '') +
-#     scale_y_continuous(labels = scales::comma_format()) +
-#     scale_fill_manual(values = c('film' = '#e50076', 
-#                                  'hetv' = '#1197FF')) +
-#     theme_minimal() +
-#     theme(
-#       legend.position = 'none',
-#       plot.subtitle = element_textbox_simple()
-#     )
-# }
+film_hetv_production_revised <- function() {
+  df_filtered <- df %>%
+    filter(production_type == 'all') %>%
+    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
+    group_by(year, category) %>%
+    filter(
+      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
+    ) %>%
+    ungroup()
 
-# all_production_revised2 <- function() {
-#   df_filtered <- df %>%
-#     filter(production_type == 'all') %>%
-#     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
-#     group_by(year, category) %>%
-#     filter(
-#       !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
-#     ) %>%
-#     ungroup() %>%
-#     # Summarize the total spend by year and category
-#     group_by(year, category) %>%
-#     summarise(UK_spend_m_total = sum(UK_spend_m, na.rm = TRUE)) %>%
-#     ungroup()
+  ggplot(df_filtered, aes(x = year, y = UK_spend_m, fill = category)) +
+    geom_bar(stat = 'identity') +  
+    geom_text(aes(label = scales::comma(round(UK_spend_m, 0))), 
+              position = position_stack(vjust = 0.9), 
+              color = 'white') + 
+    labs(
+      title = 'UK production spend, £ million', 
+      subtitle = "For <span style='color:#e50076'>**film**</span> 
+                  and <span style='color:#1197FF'>**HETV**</span> 
+                  starting principal photography in calendar year", 
+      x = 'Year', 
+      y = '') +
+    scale_y_continuous(labels = scales::comma_format()) +
+    scale_fill_manual(values = c('film' = '#e50076', 
+                                 'hetv' = '#1197FF')) +
+    theme_minimal() +
+    theme(
+      legend.position = 'none',
+      plot.subtitle = element_textbox_simple()
+    )
+}
 
-#   ggplot(df_filtered, aes(x = year, y = UK_spend_m_total, fill = year)) +
-#     geom_bar(stat = 'identity') +  
-#     geom_text(aes(label = scales::comma(round(UK_spend_m_total, 0))), 
-#               position = position_stack(vjust = 0.5), 
-#               color = 'white') + 
-#     labs(
-#       title = 'UK production spend, £ million', 
-#       subtitle = "For <span style='color:#e50076'>**film**</span> 
-#                   and <span style='color:#1197FF'>**HETV**</span> 
-#                   starting principal photography in calendar year", 
-#       x = 'Year', 
-#       y = '') +
-#     scale_y_continuous(labels = scales::comma_format()) +
-#     scale_fill_manual(values = c('film' = '#e50076', 
-#                                  'hetv' = '#1197FF')) +
-#     theme_minimal() +
-#     theme(
-#       legend.position = 'none',
-#       plot.subtitle = element_textbox_simple()
-#     )
-# }
 
-# all_production_revised <- function() {
-#   df_filtered <- df %>%
-#     filter(production_type == 'all') %>%
-#     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
-#     group_by(year, category) %>%
-#     filter(
-#       !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
-#     ) %>%
-#     ungroup()
+film_hetv_production_revised_percentage <- function() {
+  df_filtered <- df %>%
+    filter(production_type == 'all') %>%
+    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
+    group_by(year, category) %>%
+    filter(
+      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
+    ) %>%
+    ungroup() %>%
+    # Calculate the total spend per year
+    group_by(year) %>%
+    mutate(total_spend_year = sum(UK_spend_m, na.rm = TRUE)) %>%
+    ungroup() %>%
+    # Calculate the proportion for each category in each year
+    mutate(proportion = UK_spend_m / total_spend_year)
 
-#   ggplot(df_filtered, aes(x = year, y = UK_spend_m, fill = category)) +
-#     geom_bar(stat = 'identity') +  
-#     geom_text(aes(label = scales::comma(round(UK_spend_m, 0))), 
-#               position = position_stack(vjust = 0.9), 
-#               color = 'white') + 
-#     labs(
-#       title = 'UK production spend, £ million', 
-#       subtitle = "For <span style='color:#e50076'>**film**</span> 
-#                   and <span style='color:#1197FF'>**HETV**</span> 
-#                   starting principal photography in calendar year", 
-#       x = 'Year', 
-#       y = '') +
-#     scale_y_continuous(labels = scales::comma_format()) +
-#     scale_fill_manual(values = c('film' = '#e50076', 
-#                                  'hetv' = '#1197FF')) +
-#     theme_minimal() +
-#     theme(
-#       legend.position = 'none',
-#       plot.subtitle = element_textbox_simple()
-#     )
-# }
-
-# all_production_revised2 <- function() {
-#   df_filtered <- df %>%
-#     filter(production_type == 'all') %>%
-#     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
-#     group_by(year, category) %>%
-#     filter(
-#       !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
-#     ) %>%
-#     ungroup() %>%
-#     # Summarize the total spend by year and category
-#     group_by(year, category) %>%
-#     summarise(UK_spend_m_total = sum(UK_spend_m, na.rm = TRUE)) %>%
-#     ungroup()
-
-#   ggplot(df_filtered, aes(x = year, y = UK_spend_m_total, fill = year)) +
-#     geom_bar(stat = 'identity') +  
-#     geom_text(aes(label = scales::comma(round(UK_spend_m_total, 0))), 
-#               position = position_stack(vjust = 0.5), 
-#               color = 'white') + 
-#     labs(
-#       title = 'UK production spend, £ million', 
-#       subtitle = "For <span style='color:#e50076'>**film**</span> 
-#                   and <span style='color:#1197FF'>**HETV**</span> 
-#                   starting principal photography in calendar year", 
-#       x = 'Year', 
-#       y = '') +
-#     scale_y_continuous(labels = scales::comma_format()) +
-#     scale_fill_manual(values = c('film' = '#e50076', 
-#                                  'hetv' = '#1197FF')) +
-#     theme_minimal() +
-#     theme(
-#       legend.position = 'none',
-#       plot.subtitle = element_textbox_simple()
-#     )
-# }
+  ggplot(df_filtered, aes(x = year, y = proportion, fill = category)) +
+    geom_bar(stat = 'identity') +  
+    geom_text(aes(label = scales::percent(proportion, accuracy = 1)), 
+              position = position_stack(vjust = 0.5), 
+              color = 'white') +  # Position the labels at the center of each segment
+    labs(
+      title = 'UK production spend, proportion (%) by category', 
+      subtitle = "For <span style='color:#e50076'>**film**</span> 
+                  and <span style='color:#1197FF'>**HETV**</span> 
+                  starting principal photography in calendar year", 
+      x = 'Year', 
+      y = '') +
+    scale_y_continuous(labels = scales::percent_format()) +
+    scale_fill_manual(values = c('film' = '#e50076', 
+                                 'hetv' = '#1197FF')) +
+    theme_minimal() +
+    theme(
+      legend.position = 'none',
+      plot.subtitle = element_textbox_simple()
+    )
+}
