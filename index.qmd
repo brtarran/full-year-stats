@@ -4,12 +4,18 @@ execute:
   eval: true
   echo: false
   warning: false
-embed-resources: true
+# embed-resources: true
 ---
 
 ```{r}
 #| label: load-functions
 #| file: R/stats.R
+```
+
+```{r}
+#| label: set file path
+
+file_path <- here::here('data/stats.xlsx')
 ```
 
 ```{r}
@@ -19,7 +25,6 @@ embed-resources: true
 #| fig-align: center
 #| fig-dpi: 150
 
-file_path <- here::here('data/stats.xlsx')
 sheet_name <- 'uk_box_office'
 df <- load_data(file_path, sheet_name)
 uk_box_office()
@@ -32,7 +37,6 @@ uk_box_office()
 #| fig-align: center
 #| fig-dpi: 150
 
-file_path <- here::here('data/stats.xlsx')
 sheet_name <- 'uk_admissions'
 df <- load_data(file_path, sheet_name)
 uk_admissions()
@@ -45,7 +49,6 @@ uk_admissions()
 #| fig-align: center
 #| fig-dpi: 150
 
-file_path <- here::here('data/stats.xlsx')
 sheet_name <- 'uk_admissions'
 df <- load_data(file_path, sheet_name)
 uk_admissions_month()
@@ -58,7 +61,6 @@ uk_admissions_month()
 #| fig-align: center
 #| fig-dpi: 150
 
-file_path <- here::here('data/stats.xlsx')
 sheet_name <- 'uk_roi_box_office'
 df <- load_data(file_path, sheet_name)
 uk_roi_box_office()
@@ -71,7 +73,6 @@ uk_roi_box_office()
 #| fig-align: center
 #| fig-dpi: 150
 
-file_path <- here::here('data/stats.xlsx')
 sheet_name <- 'uk_film_share'
 df <- load_data(file_path, sheet_name)
 uk_market_share()
