@@ -149,3 +149,71 @@ sheet_name <- 'uk_production_detail'
 df <- load_data(file_path, sheet_name)
 film_hetv_production_revised_percentage()
 ```
+
+```{r}
+#| label: film-production-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_production_detail'
+category_select <- 'film'
+category_colour <- '#e50076'
+title <- 'Film production spend, £ million'
+subtitle <- "For <span style='color:#e50076'>**film**</span> 
+            starting principal photography in calendar year"
+df <- load_data(file_path, sheet_name)
+production_revised()
+```
+
+```{r}
+#| label: film-production-breakdown-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_production_detail'
+category_select <- 'film'
+category_colour <- '#e50076'
+title <- 'Film production spend, £ million'
+subtitle <- "For <span style='color:#e50076'>**film**</span> 
+            starting principal photography in calendar year"
+df <- load_data(file_path, sheet_name)
+production_breakdown_revised()
+```
+
+```{r}
+#| label: hetv-production-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_production_detail'
+category_select <- 'hetv'
+category_colour <- '#1197FF'
+title <- 'HETV production spend, £ million'
+subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in calendar year"
+df <- load_data(file_path, sheet_name)
+production_revised()
+```
+
+```{r}
+#| label: hetv-production-breakdown-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_production_detail'
+category_select <- 'hetv'
+category_colour <- '#1197FF'
+title <- 'HETV production spend, £ million'
+subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in calendar year"
+df <- load_data(file_path, sheet_name)
+production_breakdown_revised()
+```

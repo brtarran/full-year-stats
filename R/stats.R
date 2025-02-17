@@ -6,6 +6,7 @@ library(here)
 library(dplyr)
 library(scales)
 library(ggtext)
+library(ggrepel)
 
 
 # Load data
@@ -396,6 +397,96 @@ film_hetv_production_revised_percentage <- function() {
     scale_y_continuous(labels = scales::percent_format()) +
     scale_fill_manual(values = c('film' = '#e50076', 
                                  'hetv' = '#1197FF')) +
+    theme_minimal() +
+    theme(
+      legend.position = 'none',
+      plot.subtitle = element_textbox_simple()
+    )
+}
+
+
+production_revised <- function() {
+  df_filtered <- df %>%
+    filter(category == category_select) %>%
+    filter(!production_type %in% c('all', 'inward_investment_and_co_production')) %>%
+    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
+    group_by(year, production_type) %>%
+    filter(
+      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
+    ) %>%
+    ungroup()
+
+  df_total <- df %>%
+    filter(category == category_select) %>%
+    filter(production_type == 'all') %>%
+    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
+    group_by(year, production_type) %>%
+    filter(
+      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
+    ) %>%
+    ungroup()
+
+  ggplot(df_filtered, aes(x = year, y = UK_spend_m)) +
+    geom_bar(stat = 'identity', , fill = category_colour) +  
+    geom_text(data = df_total, aes(label = scales::comma(round(UK_spend_m, 0)), 
+              vjust = 1.5), 
+              color = 'white') + 
+    labs(
+      title = title, 
+      subtitle = subtitle, 
+      x = 'Year', 
+      y = '') +
+    scale_y_continuous(labels = scales::comma_format()) +
+    theme_minimal() +
+    theme(
+      legend.position = 'none',
+      plot.subtitle = element_textbox_simple()
+    )
+}
+
+production_breakdown_revised <- function() {
+  df_filtered <- df %>%
+    filter(category == category_select) %>%
+    filter(!production_type %in% c('all', 'inward_investment_and_co_production')) %>%
+    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
+    group_by(year, production_type) %>%
+    filter(
+      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
+    ) %>%
+    ungroup()
+
+  ggplot(df_filtered, aes(x = year, y = UK_spend_m)) +
+    geom_bar(stat = 'identity', fill = 'darkgrey') +  
+    geom_line(aes(group = production_type), color = category_colour, size = 1) + 
+    geom_point(color = category_colour, size = 2) +  # Add points to highlight values
+    geom_text_repel(
+      aes(label = scales::comma(round(UK_spend_m, 0))),  # Round to 0dp & add comma separator
+      nudge_y = 10,
+      direction = 'y',  # Only adjust in the vertical direction
+      size = 4, 
+      fontface = 'bold',
+      color = 'white',  # White text color
+      box.padding = 0.2,  # Adds slight padding around text
+      segment.color = NA  # Removes connector lines
+    ) +
+    geom_text(
+      data = df_filtered %>% filter(year == '2024') %>%
+      mutate(production_type = recode(production_type, 
+        'inward_investment' = 'INW',
+        'co_production' = 'COP',  
+        'domestic_uk' = 'DOM'
+      )),
+      aes(label = production_type),
+      color = category_colour, 
+      hjust = 0, vjust = 0.5, size = 5, fontface = "bold",
+      position = position_nudge(x = 0.1)
+    ) +  
+    labs(
+      title = title, 
+      subtitle = subtitle, 
+      x = 'Year', 
+      y = '') +
+    scale_y_continuous(labels = scales::comma_format()) +
     theme_minimal() +
     theme(
       legend.position = 'none',
