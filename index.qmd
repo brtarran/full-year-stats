@@ -19,7 +19,7 @@ embed-resources: false
 ```
 
 ```{r}
-#| label: set file path
+#| label: set-file-path
 
 file_path <- here::here('data/stats.xlsx')
 ```
@@ -60,8 +60,6 @@ uk_admissions()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_admissions'
-df <- load_data(file_path, sheet_name)
 uk_admissions_month()
 ```
 
@@ -101,8 +99,6 @@ uk_market_share()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_film_share'
-df <- load_data(file_path, sheet_name)
 uk_market_share_indie()
 ```
 
@@ -114,12 +110,13 @@ uk_market_share_indie()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_film_share'
-df <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
 
 # Film and HETV production spend {background-color="#1197FF"}
+
+**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for 2024 are therefore likely to be revised upward as more
+information becomes available in subsequent periods.
 
 ```{r}
 #| label: set-variables-spend
@@ -237,10 +234,79 @@ subtitle <- "For <span style='color:#1197FF'>**HETV**</span>
 production_breakdown_revised()
 ```
 
-<!-- # Film and HETV production count {background-color="#1197FF"}
+# Film and HETV production count {background-color="#1197FF"}
+
+**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for 2024 are therefore likely to be revised upward as more
+information becomes available in subsequent periods.
 
 ```{r}
 #| label: set file path
 
+sheet_name <- 'uk_production_detail'
+df <- load_data(file_path, sheet_name)
+metric <- 'count'
+```
 
-``` -->
+##
+```{r}
+#| label: film-production-count-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'film'
+category_colour <- '#e50076'
+title <- 'Film production count'
+subtitle <- "For <span style='color:#e50076'>**film**</span> 
+            starting principal photography in calendar year"
+production_revised()
+```
+
+##
+```{r}
+#| label: film-production-count-breakdown-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'film'
+category_colour <- '#e50076'
+title <- 'Film production count'
+subtitle <- "For <span style='color:#e50076'>**film**</span> 
+            starting principal photography in calendar year"
+production_breakdown_revised()
+```
+
+##
+```{r}
+#| label: hetv-production-count-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'hetv'
+category_colour <- '#1197FF'
+title <- 'HETV production count'
+subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in calendar year"
+production_revised()
+```
+
+##
+```{r}
+#| label: hetv-production-count-breakdown-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'hetv'
+category_colour <- '#1197FF'
+title <- 'HETV production count'
+subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in calendar year"
+production_breakdown_revised()
+```
