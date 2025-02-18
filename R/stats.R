@@ -238,7 +238,6 @@ all_production_first <- function() {
 
   df_first <- df %>%
     filter(production_type == 'all') %>%
-    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
     group_by(year, category) %>%
     filter(status == 'first_reported') %>%
     ungroup()
@@ -246,23 +245,23 @@ all_production_first <- function() {
   # Calculate total spend per year
   df_total_revised <- df_revised %>%
     group_by(year) %>%
-    summarise(total_spend = sum(UK_spend_m, na.rm = TRUE)) %>%
+    summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup()
 
   df_total_first <- df_first %>%
     group_by(year) %>%
-    summarise(total_spend = sum(UK_spend_m, na.rm = TRUE)) %>%
+    summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup()
 
   # Create the plot
-  ggplot(df_total_revised, aes(x = year, y = total_spend)) +
+  ggplot(df_total_revised, aes(x = year, y = total_metric)) +
     geom_bar(stat = 'identity', fill = 'grey', alpha = 0) +  
     # Add total spend labels for each year at the top of the stacked bars
-    geom_text(aes(label = scales::comma(round(total_spend, 0))),
+    geom_text(aes(label = scales::comma(round(total_metric, 0))),
               color = 'white', vjust = 1.5, alpha = 0) +  # Position total labels slightly above the top of the bars
     geom_bar(data = df_total_first, stat = 'identity', fill = '#783df6') +  
     # Add total spend labels for each year at the top of the stacked bars
-    geom_text(data = df_total_first, aes(label = scales::comma(round(total_spend, 0))),
+    geom_text(data = df_total_first, aes(label = scales::comma(round(total_metric, 0))),
               color = 'white', vjust = 1.5) + 
     labs(
       title = 'UK production spend, £ million', 
