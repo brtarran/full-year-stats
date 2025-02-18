@@ -371,10 +371,10 @@ film_hetv_production_revised_percentage <- function() {
     ungroup() %>%
     # Calculate the total spend per year
     group_by(year) %>%
-    mutate(total_spend_year = sum(UK_spend_m, na.rm = TRUE)) %>%
+    mutate(total_metric_year = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup() %>%
     # Calculate the proportion for each category in each year
-    mutate(proportion = UK_spend_m / total_spend_year)
+    mutate(proportion = .data[[metric]] / total_metric_year)
 
   ggplot(df_filtered, aes(x = year, y = proportion, fill = category)) +
     geom_bar(stat = 'identity') +  
@@ -382,10 +382,8 @@ film_hetv_production_revised_percentage <- function() {
               position = position_stack(vjust = 0.5), 
               color = 'white') +  # Position the labels at the center of each segment
     labs(
-      title = 'UK production spend, proportion (%) by category', 
-      subtitle = "For <span style='color:#e50076'>**film**</span> 
-                  and <span style='color:#1197FF'>**HETV**</span> 
-                  starting principal photography in calendar year", 
+      title = title, 
+      subtitle = subtitle, 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::percent_format()) +
