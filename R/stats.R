@@ -426,9 +426,9 @@ production_revised <- function() {
     ) %>%
     ungroup()
 
-  ggplot(df_filtered, aes(x = year, y = UK_spend_m)) +
+  ggplot(df_filtered, aes(x = year, y = .data[[metric]])) +
     geom_bar(stat = 'identity', , fill = category_colour) +  
-    geom_text(data = df_total, aes(label = scales::comma(round(UK_spend_m, 0)), 
+    geom_text(data = df_total, aes(label = scales::comma(round(.data[[metric]], 0)), 
               vjust = 1.5), 
               color = 'white') + 
     labs(
@@ -455,12 +455,12 @@ production_breakdown_revised <- function() {
     ) %>%
     ungroup()
 
-  ggplot(df_filtered, aes(x = year, y = UK_spend_m)) +
+  ggplot(df_filtered, aes(x = year, y = .data[[metric]])) +
     geom_bar(stat = 'identity', fill = 'darkgrey') +  
     geom_line(aes(group = production_type), color = category_colour, size = 1) + 
     geom_point(color = category_colour, size = 2) +  # Add points to highlight values
     geom_text_repel(
-      aes(label = scales::comma(round(UK_spend_m, 0))),  # Round to 0dp & add comma separator
+      aes(label = scales::comma(round(.data[[metric]], 0))),  # Round to 0dp & add comma separator
       nudge_y = 10,
       direction = 'y',  # Only adjust in the vertical direction
       size = 4, 

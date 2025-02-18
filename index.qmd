@@ -119,7 +119,15 @@ df <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
 
-# Film and HETV production {background-color="#1197FF"}
+# Film and HETV production spend {background-color="#1197FF"}
+
+```{r}
+#| label: set-variables-spend
+
+sheet_name <- 'uk_production_detail'
+df <- load_data(file_path, sheet_name)
+metric <- 'UK_spend_m'
+```
 
 ##
 ```{r}
@@ -129,8 +137,6 @@ uk_market_share_percent()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
-df <- load_data(file_path, sheet_name)
 all_production_first()
 ```
 
@@ -142,8 +148,6 @@ all_production_first()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
-df <- load_data(file_path, sheet_name)
 all_production_revised()
 ```
 
@@ -155,8 +159,6 @@ all_production_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
-df <- load_data(file_path, sheet_name)
 film_hetv_production_revised()
 ```
 
@@ -168,8 +170,6 @@ film_hetv_production_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
-df <- load_data(file_path, sheet_name)
 film_hetv_production_revised_percentage()
 ```
 
@@ -181,13 +181,11 @@ film_hetv_production_revised_percentage()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
 category_select <- 'film'
 category_colour <- '#e50076'
 title <- 'Film production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             starting principal photography in calendar year"
-df <- load_data(file_path, sheet_name)
 production_revised()
 ```
 
@@ -199,13 +197,11 @@ production_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
 category_select <- 'film'
 category_colour <- '#e50076'
 title <- 'Film production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             starting principal photography in calendar year"
-df <- load_data(file_path, sheet_name)
 production_breakdown_revised()
 ```
 
@@ -217,13 +213,11 @@ production_breakdown_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
 category_select <- 'hetv'
 category_colour <- '#1197FF'
 title <- 'HETV production spend, £ million'
 subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
             starting principal photography in calendar year"
-df <- load_data(file_path, sheet_name)
 production_revised()
 ```
 
@@ -235,12 +229,18 @@ production_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_production_detail'
 category_select <- 'hetv'
 category_colour <- '#1197FF'
 title <- 'HETV production spend, £ million'
 subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
             starting principal photography in calendar year"
-df <- load_data(file_path, sheet_name)
 production_breakdown_revised()
 ```
+
+<!-- # Film and HETV production count {background-color="#1197FF"}
+
+```{r}
+#| label: set file path
+
+
+``` -->
