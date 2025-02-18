@@ -1,10 +1,16 @@
 ---
-title: "2024 screen sector statistics summary"
+title: 2024 screen sector statistics
+author: Brian Tarran
+date: last-modified
+date-format: long
+format: revealjs
+title-slide-attributes:
+  data-background-color: "#e50076"
 execute: 
   eval: true
   echo: false
   warning: false
-embed-resources: true
+embed-resources: false
 ---
 
 ```{r}
@@ -18,6 +24,9 @@ embed-resources: true
 file_path <- here::here('data/stats.xlsx')
 ```
 
+# UK box office and admissions {background-color="#e50076"}
+
+##
 ```{r}
 #| label: uk-box-office
 #| fig-width: 8
@@ -30,6 +39,7 @@ df <- load_data(file_path, sheet_name)
 uk_box_office()
 ```
 
+##
 ```{r}
 #| label: uk-admissions
 #| fig-width: 8
@@ -42,6 +52,7 @@ df <- load_data(file_path, sheet_name)
 uk_admissions()
 ```
 
+## 
 ```{r}
 #| label: uk-admissions-month
 #| fig-width: 8
@@ -54,6 +65,9 @@ df <- load_data(file_path, sheet_name)
 uk_admissions_month()
 ```
 
+# UK and Republic of Ireland box office {background-color="#783df6"}
+
+##
 ```{r}
 #| label: uk-roi-box-office
 #| fig-width: 8
@@ -66,6 +80,7 @@ df <- load_data(file_path, sheet_name)
 uk_roi_box_office()
 ```
 
+##
 ```{r}
 #| label: uk-market-share
 #| fig-width: 8
@@ -78,6 +93,7 @@ df <- load_data(file_path, sheet_name)
 uk_market_share()
 ```
 
+##
 ```{r}
 #| label: uk-market-share-indie
 #| fig-width: 8
@@ -90,6 +106,7 @@ df <- load_data(file_path, sheet_name)
 uk_market_share_indie()
 ```
 
+##
 ```{r}
 #| label: uk-market-share-percent
 #| fig-width: 8
@@ -102,6 +119,9 @@ df <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
 
+# Film and HETV production {background-color="#1197FF"}
+
+##
 ```{r}
 #| label: all-production-first
 #| fig-width: 8
@@ -114,6 +134,7 @@ df <- load_data(file_path, sheet_name)
 all_production_first()
 ```
 
+##
 ```{r}
 #| label: all-production-revised
 #| fig-width: 8
@@ -126,6 +147,7 @@ df <- load_data(file_path, sheet_name)
 all_production_revised()
 ```
 
+##
 ```{r}
 #| label: film-hetv-production-revised
 #| fig-width: 8
@@ -138,6 +160,7 @@ df <- load_data(file_path, sheet_name)
 film_hetv_production_revised()
 ```
 
+##
 ```{r}
 #| label: film-hetv-production-revised-percentage
 #| fig-width: 8
@@ -150,6 +173,7 @@ df <- load_data(file_path, sheet_name)
 film_hetv_production_revised_percentage()
 ```
 
+##
 ```{r}
 #| label: film-production-revised
 #| fig-width: 8
@@ -167,6 +191,7 @@ df <- load_data(file_path, sheet_name)
 production_revised()
 ```
 
+##
 ```{r}
 #| label: film-production-breakdown-revised
 #| fig-width: 8
@@ -184,6 +209,7 @@ df <- load_data(file_path, sheet_name)
 production_breakdown_revised()
 ```
 
+##
 ```{r}
 #| label: hetv-production-revised
 #| fig-width: 8
@@ -201,6 +227,7 @@ df <- load_data(file_path, sheet_name)
 production_revised()
 ```
 
+##
 ```{r}
 #| label: hetv-production-breakdown-revised
 #| fig-width: 8
