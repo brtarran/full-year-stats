@@ -264,9 +264,8 @@ all_production_first <- function() {
     geom_text(data = df_total_first, aes(label = scales::comma(round(total_metric, 0))),
               color = 'white', vjust = 1.5) + 
     labs(
-      title = 'UK production spend, £ million', 
-      subtitle = "For film and HETV starting principal photography in calendar year, 
-                  <span style='color:#783df6'>**first reported**</span>", 
+      title = title, 
+      subtitle = subtitle, 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -298,29 +297,27 @@ all_production_revised <- function() {
   # Calculate total spend per year
   df_total_revised <- df_revised %>%
     group_by(year) %>%
-    summarise(total_spend = sum(UK_spend_m, na.rm = TRUE)) %>%
+    summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup()
 
   df_total_first <- df_first %>%
     group_by(year) %>%
-    summarise(total_spend = sum(UK_spend_m, na.rm = TRUE)) %>%
+    summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup()
 
   # Create the plot
-  ggplot(df_total_revised, aes(x = year, y = total_spend)) +
+  ggplot(df_total_revised, aes(x = year, y = total_metric)) +
     geom_bar(stat = 'identity', fill = 'darkgrey') +  
     # Add total spend labels for each year at the top of the stacked bars
-    geom_text(aes(label = scales::comma(round(total_spend, 0))),
+    geom_text(aes(label = scales::comma(round(total_metric, 0))),
               color = 'white', vjust = 1.5) +  # Position total labels slightly above the top of the bars
     geom_bar(data = df_total_first, stat = 'identity', fill = '#783df6') +  
     # Add total spend labels for each year at the top of the stacked bars
-    geom_text(aes(label = scales::comma(round(total_spend, 0))),
+    geom_text(aes(label = scales::comma(round(total_metric, 0))),
               color = 'white', vjust = 1.5) + 
     labs(
-      title = 'UK production spend, £ million', 
-      subtitle = "For film and HETV starting principal photography in calendar year, 
-                  <span style='color:#783df6'>**first reported**</span> and 
-                  <span style='color:darkgrey'>**revised**</span>",
+      title = title, 
+      subtitle = subtitle,
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -342,16 +339,14 @@ film_hetv_production_revised <- function() {
     ) %>%
     ungroup()
 
-  ggplot(df_filtered, aes(x = year, y = UK_spend_m, fill = category)) +
+  ggplot(df_filtered, aes(x = year, y = .data[[metric]], fill = category)) +
     geom_bar(stat = 'identity') +  
-    geom_text(aes(label = scales::comma(round(UK_spend_m, 0))), 
+    geom_text(aes(label = scales::comma(round(.data[[metric]], 0))), 
               position = position_stack(vjust = 0.9), 
               color = 'white') + 
     labs(
-      title = 'UK production spend, £ million', 
-      subtitle = "For <span style='color:#e50076'>**film**</span> 
-                  and <span style='color:#1197FF'>**HETV**</span> 
-                  starting principal photography in calendar year", 
+      title = title, 
+      subtitle = subtitle,
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
