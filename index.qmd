@@ -1,6 +1,6 @@
 ---
-title: 2024 screen sector statistics
-author: Brian Tarran
+title: BFI Q1 2025 screen sector statistics
+author: Ian Cade
 date: last-modified
 date-format: long
 format: revealjs
@@ -21,7 +21,7 @@ embed-resources: false
 ```{r}
 #| label: set-file-path
 
-file_path <- here::here('data/stats.xlsx')
+file_path <- here::here('data/q1_stats.xlsx')
 ```
 
 # UK box office and admissions {background-color="#e50076"}
@@ -65,8 +65,8 @@ uk_admissions_month()
 
 # UK and Republic of Ireland box office {background-color="#783df6"}
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: uk-roi-box-office
 #| fig-width: 8
 #| fig-height: 6
@@ -76,10 +76,10 @@ uk_admissions_month()
 sheet_name <- 'uk_roi_box_office'
 df <- load_data(file_path, sheet_name)
 uk_roi_box_office()
-```
+``` -->
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: uk-market-share
 #| fig-width: 8
 #| fig-height: 6
@@ -89,10 +89,10 @@ uk_roi_box_office()
 sheet_name <- 'uk_film_share'
 df <- load_data(file_path, sheet_name)
 uk_market_share()
-```
+``` -->
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: uk-market-share-indie
 #| fig-width: 8
 #| fig-height: 6
@@ -100,7 +100,7 @@ uk_market_share()
 #| fig-dpi: 150
 
 uk_market_share_indie()
-```
+``` -->
 
 ##
 ```{r}
@@ -110,12 +110,14 @@ uk_market_share_indie()
 #| fig-align: center
 #| fig-dpi: 150
 
+sheet_name <- 'uk_film_share'
+df <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
 
 # Film and HETV production spend {background-color="#1197FF"}
 
-**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for 2024 are therefore likely to be revised upward as more
+**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for year ending March 2025 are therefore likely to be revised upward as more
 information becomes available in subsequent periods.
 
 ```{r}
@@ -126,8 +128,8 @@ df <- load_data(file_path, sheet_name)
 metric <- 'UK_spend_m'
 ```
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: all-production-first
 #| fig-width: 8
 #| fig-height: 6
@@ -137,10 +139,10 @@ title <- 'UK production spend, £ million'
 subtitle <- "For film and HETV starting principal photography in calendar year, 
             <span style='color:#783df6'>**first reported**</span>"
 all_production_first()
-```
+``` -->
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: all-production-revised
 #| fig-width: 8
 #| fig-height: 6
@@ -152,7 +154,7 @@ subtitle <- "For film and HETV starting principal photography in calendar year,
             <span style='color:#783df6'>**first reported**</span> and 
             <span style='color:darkgrey'>**revised**</span>"
 all_production_revised()
-```
+``` -->
 
 ##
 ```{r}
@@ -165,7 +167,7 @@ all_production_revised()
 title <- 'UK production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 film_hetv_production_revised()
 ```
 
@@ -179,7 +181,7 @@ film_hetv_production_revised()
 title <- 'UK production spend, proportion (%) by category' 
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 film_hetv_production_revised_percentage()
 ```
 
@@ -195,7 +197,7 @@ category_select <- 'film'
 category_colour <- '#e50076'
 title <- 'Film production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -211,7 +213,7 @@ category_select <- 'film'
 category_colour <- '#e50076'
 title <- 'Film production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 
@@ -227,7 +229,7 @@ category_select <- 'hetv'
 category_colour <- '#1197FF'
 title <- 'HETV production spend, £ million'
 subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -243,13 +245,13 @@ category_select <- 'hetv'
 category_colour <- '#1197FF'
 title <- 'HETV production spend, £ million'
 subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 
 # Film and HETV production count {background-color="#1197FF"}
 
-**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for 2024 are therefore likely to be revised upward as more
+**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for year ending March 2025 are therefore likely to be revised upward as more
 information becomes available in subsequent periods.
 
 ```{r}
@@ -260,8 +262,8 @@ df <- load_data(file_path, sheet_name)
 metric <- 'count'
 ```
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: all-production-count-first
 #| fig-width: 8
 #| fig-height: 6
@@ -271,10 +273,10 @@ title <- 'UK production count'
 subtitle <- "For film and HETV starting principal photography in calendar year, 
             <span style='color:#783df6'>**first reported**</span>"
 all_production_first()
-```
+``` -->
 
-##
-```{r}
+<!-- ## -->
+<!-- ```{r}
 #| label: all-production-count-revised
 #| fig-width: 8
 #| fig-height: 6
@@ -286,7 +288,7 @@ subtitle <- "For film and HETV starting principal photography in calendar year,
             <span style='color:#783df6'>**first reported**</span> and 
             <span style='color:darkgrey'>**revised**</span>"
 all_production_revised()
-```
+``` -->
 
 ##
 ```{r}
@@ -299,7 +301,7 @@ all_production_revised()
 title <- 'UK production count' 
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year" 
+            starting principal photography in year to March" 
 film_hetv_production_revised()
 ```
 
@@ -313,7 +315,7 @@ film_hetv_production_revised()
 title <- 'UK production count, proportion (%) by category' 
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 film_hetv_production_revised_percentage()
 ```
 
@@ -329,7 +331,7 @@ category_select <- 'film'
 category_colour <- '#e50076'
 title <- 'Film production count'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -345,7 +347,7 @@ category_select <- 'film'
 category_colour <- '#e50076'
 title <- 'Film production count'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 
@@ -361,7 +363,7 @@ category_select <- 'hetv'
 category_colour <- '#1197FF'
 title <- 'HETV production count'
 subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -377,7 +379,7 @@ category_select <- 'hetv'
 category_colour <- '#1197FF'
 title <- 'HETV production count'
 subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in calendar year"
+            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 

@@ -29,7 +29,7 @@ uk_box_office <- function() {
     geom_text(aes(label = scales::comma(uk_box_office_m)), vjust = 1.5, color = 'white') + 
     labs(
       title = 'UK box office, £ million', 
-      subtitle = 'All titles on release, including event titles', 
+      subtitle = 'All titles on release, including event titles, January to March', 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
@@ -156,7 +156,7 @@ uk_market_share_percent <- function() {
     labs(
       title = 'Share of UK and Republic of Ireland box office, %',
       subtitle = "For <span style='color:#e50076'>**all UK independent films**</span> 
-                  and <span style='color:#1197FF'>**other UK qualifying films**</span>",
+                  and <span style='color:#1197FF'>**other UK qualifying films**</span> released January to March",
       x = 'Year',
       y = '',
       fill = 'Film type') +
@@ -185,7 +185,7 @@ uk_admissions <- function() {
     geom_text(aes(label = scales::comma(round(admissions_m, 0))), vjust = 1.5, color = 'white') + 
     labs(
       title = 'UK admissions, million',
-      subtitle = 'All titles on release, including event titles',
+      subtitle = 'All titles on release, including event titles, January to March',
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
@@ -206,14 +206,14 @@ uk_admissions_month <- function() {
     geom_line(aes(color = color), size = 1) +
     geom_point(aes(color = color), size = 2) +
     geom_text(
-      data = df %>% filter(month == "December"),
+      data = df %>% group_by(year) %>% filter(row_number() == n()),
       aes(label = year, x = month, y = admissions_m, color = color),
       hjust = 0, vjust = 0.5, size = 5, fontface = "bold",
-      position = position_nudge(x = 0.1)
+      position = position_nudge(x = 0.05)
     ) +
     labs(
       title = 'UK admissions, million',
-      subtitle = 'All titles on release, including event titles',
+      subtitle = 'All titles on release, including event titles, January to March',
       x = 'Month',
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
@@ -462,7 +462,7 @@ production_breakdown_revised <- function() {
       segment.color = NA  # Removes connector lines
     ) +
     geom_text(
-      data = df_filtered %>% filter(year == '2024') %>%
+      data = df_filtered %>% filter(year == '2025') %>%
       mutate(production_type = recode(production_type, 
         'inward_investment' = 'INW',
         'co_production' = 'COP',  
