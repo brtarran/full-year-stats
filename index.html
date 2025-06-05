@@ -10,9 +10,9 @@
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
   <meta name="generator" content="quarto-1.4.549">
 
-  <meta name="author" content="Brian Tarran">
-  <meta name="dcterms.date" content="2025-02-18">
-  <title>Full-year-stats - 2024 screen sector statistics</title>
+  <meta name="author" content="Ian Cade">
+  <meta name="dcterms.date" content="2025-06-05">
+  <title>Full-year-stats - 2025 Q1 screen sector statistics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -327,17 +327,17 @@
     <div class="slides">
 
 <section id="title-slide" data-background-color="#e50076" class="quarto-title-block center">
-  <h1 class="title">2024 screen sector statistics</h1>
+  <h1 class="title">2025 Q1 screen sector statistics</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
 <div class="quarto-title-author-name">
-Brian Tarran 
+Ian Cade 
 </div>
 </div>
 </div>
 
-  <p class="date">February 18, 2025</p>
+  <p class="date">June 5, 2025</p>
 </section>
 <section>
 <section id="uk-box-office-and-admissions" class="title-slide slide level1 center" data-background-color="#e50076">
@@ -359,95 +359,152 @@ Brian Tarran
 <section>
 <section id="uk-and-republic-of-ireland-box-office" class="title-slide slide level1 center" data-background-color="#783df6">
 <h1>UK and Republic of Ireland box office</h1>
+<!-- ## -->
+<!-- ```{r}
+#| label: uk-roi-box-office
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
 
+sheet_name <- 'uk_roi_box_office'
+df <- load_data(file_path, sheet_name)
+uk_roi_box_office()
+``` -->
+<!-- ## -->
+<!-- ```{r}
+#| label: uk-market-share
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+sheet_name <- 'uk_film_share'
+df <- load_data(file_path, sheet_name)
+uk_market_share()
+``` -->
+<!-- ## -->
+<!-- ```{r}
+#| label: uk-market-share-indie
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+uk_market_share_indie()
+``` -->
 </section>
 <section id="section-3" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/uk-roi-box-office-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-4" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/uk-market-share-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-5" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/uk-market-share-indie-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-6" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/uk-market-share-percent-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section></section>
 <section>
 <section id="film-and-hetv-production-spend" class="title-slide slide level1 center" data-background-color="#1197FF">
 <h1>Film and HETV production spend</h1>
-<p><strong>Note:</strong> Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for 2024 are therefore likely to be revised upward as more information becomes available in subsequent periods.</p>
+<p><strong>Note:</strong> Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for year ending March 2025 are therefore likely to be revised upward as more information becomes available in subsequent periods.</p>
+<!-- ## -->
+<!-- ```{r}
+#| label: all-production-first
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+title <- 'UK production spend, £ million'
+subtitle <- "For film and HETV starting principal photography in calendar year, 
+            <span style='color:#783df6'>**first reported**</span>"
+all_production_first()
+``` -->
+<!-- ## -->
+<!-- ```{r}
+#| label: all-production-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+title <- 'UK production spend, £ million' 
+subtitle <- "For film and HETV starting principal photography in calendar year, 
+            <span style='color:#783df6'>**first reported**</span> and 
+            <span style='color:darkgrey'>**revised**</span>"
+all_production_revised()
+``` -->
 </section>
-<section id="section-7" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/all-production-first-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-8" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/all-production-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-9" class="slide level2">
+<section id="section-4" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-hetv-production-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-10" class="slide level2">
+<section id="section-5" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-hetv-production-revised-percentage-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-11" class="slide level2">
+<section id="section-6" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-production-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-12" class="slide level2">
+<section id="section-7" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-production-breakdown-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-13" class="slide level2">
+<section id="section-8" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/hetv-production-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-14" class="slide level2">
+<section id="section-9" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/hetv-production-breakdown-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section></section>
 <section>
 <section id="film-and-hetv-production-count" class="title-slide slide level1 center" data-background-color="#1197FF">
 <h1>Film and HETV production count</h1>
-<p><strong>Note:</strong> Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for 2024 are therefore likely to be revised upward as more information becomes available in subsequent periods.</p>
+<p><strong>Note:</strong> Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for year ending March 2025 are therefore likely to be revised upward as more information becomes available in subsequent periods.</p>
+<!-- ## -->
+<!-- ```{r}
+#| label: all-production-count-first
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+title <- 'UK production count'
+subtitle <- "For film and HETV starting principal photography in calendar year, 
+            <span style='color:#783df6'>**first reported**</span>"
+all_production_first()
+``` -->
+<!-- ## -->
+<!-- ```{r}
+#| label: all-production-count-revised
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+title <- 'UK production count'
+subtitle <- "For film and HETV starting principal photography in calendar year, 
+            <span style='color:#783df6'>**first reported**</span> and 
+            <span style='color:darkgrey'>**revised**</span>"
+all_production_revised()
+``` -->
 </section>
-<section id="section-15" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/all-production-count-first-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-16" class="slide level2">
-<h2></h2>
-
-<img data-src="index_files/figure-revealjs/all-production-count-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-17" class="slide level2">
+<section id="section-10" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-hetv-production-count-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-18" class="slide level2">
+<section id="section-11" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-hetv-production-count-revised-percentage-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-19" class="slide level2">
+<section id="section-12" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-production-count-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-20" class="slide level2">
+<section id="section-13" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/film-production-count-breakdown-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-21" class="slide level2">
+<section id="section-14" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/hetv-production-count-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section>
-<section id="section-22" class="slide level2">
+<section id="section-15" class="slide level2">
 <h2></h2>
 
 <img data-src="index_files/figure-revealjs/hetv-production-count-breakdown-revised-1.png" class="quarto-figure quarto-figure-center r-stretch" width="1200"></section></section>
