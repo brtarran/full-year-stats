@@ -25,15 +25,44 @@ load_data <- function(file_path, sheet_name) {
 
 
 uk_box_office <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year) %>%
+    summarise(uk_box_office_m = sum(uk_box_office_m, na.rm = TRUE), .groups = "drop")
+  
+  # Plot
   ggplot(df, aes(x = year, y = uk_box_office_m)) +
-    geom_bar(stat = 'identity', fill = '#e50076') +  
-    geom_text(aes(label = scales::comma(uk_box_office_m)), vjust = 1.5, color = 'white') + 
+    geom_bar(stat = 'identity', fill = '#e50076') +
+    geom_text(aes(label = scales::comma(round(uk_box_office_m, 0))), 
+              vjust = 1.5, color = 'white') +
     labs(
-      title = 'UK box office, £ million', 
-      subtitle = 'All titles on release, including event titles', 
-      x = 'Year', 
-      y = '') +
-    scale_y_continuous(labels = scales::comma_format()) + 
+      title = 'UK box office, £ million',
+      subtitle = paste0('All titles on release, including event titles, January to ', latest_month),
+      x = 'Year',
+      y = ''
+    ) +
+    scale_y_continuous(labels = scales::comma_format()) +
     theme_minimal()
 }
 
@@ -177,8 +206,6 @@ uk_market_share_percent <- function() {
 # Admissions
 
 uk_admissions <- function() {
-  library(lubridate)  # for month conversion
-  
   df <- df %>%
     mutate(
       year = as.numeric(as.character(year)),

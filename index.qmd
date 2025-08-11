@@ -1,6 +1,6 @@
 ---
-title: BFI Q1 2025 screen sector statistics
-author: Ian Cade
+title: BFI screen sector statistics to June 2025
+author: Brian Tarran
 date: last-modified
 date-format: long
 format: revealjs
@@ -32,7 +32,6 @@ file_path <- here::here('data/bfi_stats_release_data.xlsx')
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 sheet_name <- 'uk_box_office'
 df <- load_data(file_path, sheet_name)
