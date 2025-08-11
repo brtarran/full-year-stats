@@ -348,6 +348,21 @@ uk_admissions_month <- function() {
 # Production
 
 all_production_first <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter))
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
   df_revised <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
@@ -399,6 +414,21 @@ all_production_first <- function() {
 
 
 all_production_revised <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter))
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
   df_revised <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist

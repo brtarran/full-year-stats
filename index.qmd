@@ -185,7 +185,6 @@ uk_market_share_percent()
 
 ```{r}
 #| label: set-variables-spend
-#| eval: false
 
 sheet_name <- 'uk_production_detail'
 df <- load_data(file_path, sheet_name)
@@ -199,7 +198,6 @@ metric <- 'UK_spend_m'
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 title <- 'UK production spend, £ million'
 subtitle <- "For film and HETV starting principal photography in calendar year, 
@@ -214,7 +212,6 @@ all_production_first()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 title <- 'UK production spend, £ million' 
 subtitle <- "For film and HETV starting principal photography in calendar year, 
