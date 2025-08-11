@@ -101,23 +101,36 @@ uk_admissions_month()
 ```
 
 </div>
+
 # UK and Republic of Ireland box office {background-color="#783df6"}
 
 ##
+
+<div id="left">
+
+At the UK and Republic of Ireland (ROI) box office in H1 2025:
+
+* Revenue for films released in H1 2025 was £467.8 million, up 14% on H1 2024 and
+down 20% on H1 2019.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: uk-roi-box-office
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 sheet_name <- 'uk_roi_box_office'
 df <- load_data(file_path, sheet_name)
 uk_roi_box_office()
 ```
 
-##
+</div>
+
 ```{r}
 #| label: uk-market-share
 #| fig-width: 8
@@ -131,7 +144,6 @@ df <- load_data(file_path, sheet_name)
 uk_market_share()
 ```
 
-##
 ```{r}
 #| label: uk-market-share-indie
 #| fig-width: 8
@@ -144,23 +156,32 @@ uk_market_share_indie()
 ```
 
 ##
+
+<div id="left">
+
+* The total market share of all UK qualifying films was 44.7%, almost 20 percentage points higher than H1 2024’s total UK qualifying share (26.3%).
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: uk-market-share-percent
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 sheet_name <- 'uk_film_share'
 df <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
 
+</div>
+
 # Film and HETV production spend {background-color="#1197FF"}
 
-**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for year ending March 2025 are therefore likely to be revised upward as more
-information becomes available in subsequent periods.
+**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for more recent periods are therefore likely to be revised upward as more information becomes available.
 
 ```{r}
 #| label: set-variables-spend
@@ -304,8 +325,7 @@ production_breakdown_revised()
 
 # Film and HETV production count {background-color="#1197FF"}
 
-**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for year ending March 2025 are therefore likely to be revised upward as more
-information becomes available in subsequent periods.
+**Note:** Production spend and count are revised over time to account for lags in obtaining complete data across all types of productions. Figures for more recent periods are therefore likely to be revised upward as more information becomes available.
 
 ```{r}
 #| label: set-variables-count

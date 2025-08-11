@@ -68,12 +68,39 @@ uk_box_office <- function() {
 
 
 uk_roi_box_office <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year) %>%
+    summarise(uk_roi_box_office_m = sum(uk_roi_box_office_m, na.rm = TRUE), .groups = "drop")
+  
+  # Plot
   ggplot(df, aes(x = year, y = uk_roi_box_office_m)) +
     geom_bar(stat = 'identity', fill = '#783df6') +  
     geom_text(aes(label = scales::comma(uk_roi_box_office_m)), vjust = 1.5, color = 'white') + 
     labs(
       title = 'UK and Republic of Ireland box office, £ million', 
-      subtitle = "<span style='color:#783df6'>All films</span> released in calendar year, excluding event titles",
+      subtitle = paste0("<span style='color:#783df6'>All films</span> released in calendar year, excluding event titles, January to ", latest_month),
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
@@ -164,11 +191,37 @@ uk_market_share_indie <- function() {
 
 
 uk_market_share_percent <- function() {
-  df$year <- as.numeric(as.character(df$year))
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year, film_type) %>%
+    summarise(market_share_percent = sum(market_share_percent, na.rm = TRUE), .groups = "drop")
 
   last_5_years <- max(df$year, na.rm = TRUE) - 5
   df_filtered <- df %>%
     filter(year >= last_5_years)
+
+  df_filtered$film_type <- factor(df_filtered$film_type, levels = c("uk_independent", "other_uk_qualifying"))
 
   ggplot(df_filtered, aes(x = factor(year), y = market_share_percent)) +
     # Layer 1: All films (no stacking)
@@ -185,8 +238,8 @@ uk_market_share_percent <- function() {
               color = 'white') +
     labs(
       title = 'Share of UK and Republic of Ireland box office, %',
-      subtitle = "For <span style='color:#e50076'>**all UK independent films**</span> 
-                  and <span style='color:#1197FF'>**other UK qualifying films**</span> released January to March",
+      subtitle = paste0("For <span style='color:#e50076'>**all UK independent films**</span> 
+                  and <span style='color:#1197FF'>**other UK qualifying films**</span> released January to ", latest_month),
       x = 'Year',
       y = '',
       fill = 'Film type') +
