@@ -7,7 +7,6 @@ format: revealjs
 title-slide-attributes:
   data-background-color: "#e50076"
 execute: 
-  eval: true
   echo: false
   warning: false
 embed-resources: false
@@ -21,7 +20,7 @@ embed-resources: false
 ```{r}
 #| label: set-file-path
 
-file_path <- here::here('data/q1_stats.xlsx')
+file_path <- here::here('data/bfi_stats_release_data.xlsx')
 ```
 
 # UK box office and admissions {background-color="#e50076"}
@@ -33,6 +32,7 @@ file_path <- here::here('data/q1_stats.xlsx')
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 sheet_name <- 'uk_box_office'
 df <- load_data(file_path, sheet_name)
@@ -65,42 +65,45 @@ uk_admissions_month()
 
 # UK and Republic of Ireland box office {background-color="#783df6"}
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: uk-roi-box-office
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 sheet_name <- 'uk_roi_box_office'
 df <- load_data(file_path, sheet_name)
 uk_roi_box_office()
-``` -->
+```
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: uk-market-share
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 sheet_name <- 'uk_film_share'
 df <- load_data(file_path, sheet_name)
 uk_market_share()
-``` -->
+```
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: uk-market-share-indie
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 uk_market_share_indie()
-``` -->
+```
 
 ##
 ```{r}
@@ -109,6 +112,7 @@ uk_market_share_indie()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 sheet_name <- 'uk_film_share'
 df <- load_data(file_path, sheet_name)
@@ -122,39 +126,43 @@ information becomes available in subsequent periods.
 
 ```{r}
 #| label: set-variables-spend
+#| eval: false
 
 sheet_name <- 'uk_production_detail'
 df <- load_data(file_path, sheet_name)
 metric <- 'UK_spend_m'
 ```
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: all-production-first
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
+
 title <- 'UK production spend, £ million'
 subtitle <- "For film and HETV starting principal photography in calendar year, 
             <span style='color:#783df6'>**first reported**</span>"
 all_production_first()
-``` -->
+```
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: all-production-revised
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 title <- 'UK production spend, £ million' 
 subtitle <- "For film and HETV starting principal photography in calendar year, 
             <span style='color:#783df6'>**first reported**</span> and 
             <span style='color:darkgrey'>**revised**</span>"
 all_production_revised()
-``` -->
+```
 
 ##
 ```{r}
@@ -163,6 +171,7 @@ all_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 title <- 'UK production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
@@ -178,6 +187,8 @@ film_hetv_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
+
 title <- 'UK production spend, proportion (%) by category' 
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             and <span style='color:#1197FF'>**HETV**</span> 
@@ -192,6 +203,7 @@ film_hetv_production_revised_percentage()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'film'
 category_colour <- '#e50076'
@@ -208,6 +220,7 @@ production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'film'
 category_colour <- '#e50076'
@@ -224,6 +237,7 @@ production_breakdown_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'hetv'
 category_colour <- '#1197FF'
@@ -240,6 +254,7 @@ production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'hetv'
 category_colour <- '#1197FF'
@@ -256,39 +271,43 @@ information becomes available in subsequent periods.
 
 ```{r}
 #| label: set-variables-count
+#| eval: false
 
 sheet_name <- 'uk_production_detail'
 df <- load_data(file_path, sheet_name)
 metric <- 'count'
 ```
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: all-production-count-first
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
+
 title <- 'UK production count'
 subtitle <- "For film and HETV starting principal photography in calendar year, 
             <span style='color:#783df6'>**first reported**</span>"
 all_production_first()
-``` -->
+```
 
-<!-- ## -->
-<!-- ```{r}
+##
+```{r}
 #| label: all-production-count-revised
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 title <- 'UK production count'
 subtitle <- "For film and HETV starting principal photography in calendar year, 
             <span style='color:#783df6'>**first reported**</span> and 
             <span style='color:darkgrey'>**revised**</span>"
 all_production_revised()
-``` -->
+```
 
 ##
 ```{r}
@@ -297,6 +316,7 @@ all_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 title <- 'UK production count' 
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
@@ -312,6 +332,8 @@ film_hetv_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
+
 title <- 'UK production count, proportion (%) by category' 
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
             and <span style='color:#1197FF'>**HETV**</span> 
@@ -326,6 +348,7 @@ film_hetv_production_revised_percentage()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'film'
 category_colour <- '#e50076'
@@ -342,6 +365,7 @@ production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'film'
 category_colour <- '#e50076'
@@ -358,6 +382,7 @@ production_breakdown_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'hetv'
 category_colour <- '#1197FF'
@@ -374,6 +399,7 @@ production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 category_select <- 'hetv'
 category_colour <- '#1197FF'
