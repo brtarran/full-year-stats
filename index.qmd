@@ -3,7 +3,10 @@ title: BFI screen sector statistics to June 2025
 author: Brian Tarran
 date: last-modified
 date-format: long
-format: revealjs
+format: 
+  revealjs:
+    smaller: true
+css: style.css
 title-slide-attributes:
   data-background-color: "#e50076"
 execute: 
@@ -25,7 +28,20 @@ file_path <- here::here('data/bfi_stats_release_data.xlsx')
 
 # UK box office and admissions {background-color="#e50076"}
 
+
 ##
+
+<div id="left">
+
+In the UK in the period January to June (H1) 2025:
+
+* Box office revenue was £496.3 million, up 18% on H1 2024 and down 17% on H1 2019.
+* The highest earning film was *A Minecraft Movie*, released in the first week of April.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: uk-box-office
 #| fig-width: 8
@@ -38,7 +54,19 @@ df <- load_data(file_path, sheet_name)
 uk_box_office()
 ```
 
-##
+</div>
+
+## 
+
+<div id="left">
+
+* There were 61 million cinema admissions, 12% higher than in H1 2024 and 27% lower
+than in H1 2019.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: uk-admissions
 #| fig-width: 8
@@ -50,8 +78,18 @@ sheet_name <- 'uk_admissions'
 df <- load_data(file_path, sheet_name)
 uk_admissions()
 ```
+</div>
 
 ## 
+
+<div id="left">
+
+* April recorded 2025's highest monthly admissions to date, at 11.8 million.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: uk-admissions-month
 #| fig-width: 8
@@ -62,6 +100,7 @@ uk_admissions()
 uk_admissions_month()
 ```
 
+</div>
 # UK and Republic of Ireland box office {background-color="#783df6"}
 
 ##
