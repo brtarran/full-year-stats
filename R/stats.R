@@ -13,8 +13,7 @@ library(lubridate)
 # Load data
 
 load_data <- function(file_path, sheet_name) {
-  df <- read_xlsx(file_path, sheet = sheet_name) %>%
-    mutate(year = as.factor(year))
+  df <- read_xlsx(file_path, sheet = sheet_name)
   return(df)
 }
 
@@ -48,8 +47,7 @@ uk_box_office <- function() {
   # Filter data for all years but only latest_quarter
   df <- df %>%
     filter(quarter == latest_quarter) %>%
-    group_by(year) %>%
-    summarise(uk_box_office_m = sum(uk_box_office_m, na.rm = TRUE), .groups = "drop")
+    group_by(year)
   
   # Plot
   ggplot(df, aes(x = year, y = uk_box_office_m)) +
@@ -91,8 +89,7 @@ uk_roi_box_office <- function() {
   # Filter data for all years but only latest_quarter
   df <- df %>%
     filter(quarter == latest_quarter) %>%
-    group_by(year) %>%
-    summarise(uk_roi_box_office_m = sum(uk_roi_box_office_m, na.rm = TRUE), .groups = "drop")
+    group_by(year)
   
   # Plot
   ggplot(df, aes(x = year, y = uk_roi_box_office_m)) +
@@ -214,14 +211,13 @@ uk_market_share_percent <- function() {
   # Filter data for all years but only latest_quarter
   df <- df %>%
     filter(quarter == latest_quarter) %>%
-    group_by(year, film_type) %>%
-    summarise(market_share_percent = sum(market_share_percent, na.rm = TRUE), .groups = "drop")
+    group_by(year, film_type)
 
   last_5_years <- max(df$year, na.rm = TRUE) - 5
   df_filtered <- df %>%
     filter(year >= last_5_years)
 
-  df_filtered$film_type <- factor(df_filtered$film_type, levels = c("uk_independent", "other_uk_qualifying"))
+  df_filtered$film_type <- factor(df_filtered$film_type, levels = c("other_uk_qualifying", "uk_independent"))
 
   ggplot(df_filtered, aes(x = factor(year), y = market_share_percent)) +
     # Layer 1: All films (no stacking)
