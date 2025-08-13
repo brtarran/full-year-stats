@@ -246,7 +246,6 @@ all_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 title <- 'UK production spend, £ million'
 subtitle <- "For <span style='color:#e50076'>**film**</span> 
@@ -262,12 +261,8 @@ film_hetv_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 title <- 'UK production spend, proportion (%) by category' 
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 film_hetv_production_revised_percentage()
 ```
 
@@ -392,10 +387,7 @@ all_production_revised()
 #| fig-dpi: 150
 #| eval: false
 
-title <- 'UK production count' 
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March" 
+title <- 'UK production count'  
 film_hetv_production_revised()
 ```
 

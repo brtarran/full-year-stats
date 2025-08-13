@@ -484,6 +484,24 @@ all_production_revised <- function() {
 
 
 film_hetv_production_revised <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+    
   df_filtered <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
@@ -500,7 +518,9 @@ film_hetv_production_revised <- function() {
               color = 'white') + 
     labs(
       title = title, 
-      subtitle = subtitle,
+      subtitle = paste0("<span style='color:#e50076'>**Film**</span> 
+            and <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in 12 months to ", latest_month), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -515,6 +535,24 @@ film_hetv_production_revised <- function() {
 
 
 film_hetv_production_revised_percentage <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+     
   df_filtered <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
@@ -537,7 +575,9 @@ film_hetv_production_revised_percentage <- function() {
               color = 'white') +  # Position the labels at the center of each segment
     labs(
       title = title, 
-      subtitle = subtitle, 
+      subtitle = paste0("<span style='color:#e50076'>**Film**</span> 
+            and <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in 12 months to ", latest_month), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::percent_format()) +
