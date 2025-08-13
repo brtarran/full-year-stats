@@ -210,7 +210,6 @@ In the UK in the rolling year July 2024 to June 2025:
 #| fig-align: center
 #| fig-dpi: 150
 
-title <- 'UK production spend, £ million'
 all_production_first()
 ```
 
@@ -233,7 +232,6 @@ all_production_first()
 #| fig-align: center
 #| fig-dpi: 150
 
-title <- 'UK production spend, £ million' 
 all_production_revised()
 ```
 
@@ -247,10 +245,6 @@ all_production_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-title <- 'UK production spend, £ million'
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 film_hetv_production_revised()
 ```
 
@@ -262,7 +256,6 @@ film_hetv_production_revised()
 #| fig-align: center
 #| fig-dpi: 150
 
-title <- 'UK production spend, proportion (%) by category' 
 film_hetv_production_revised_percentage()
 ```
 
@@ -273,13 +266,8 @@ film_hetv_production_revised_percentage()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'film'
-category_colour <- '#e50076'
-title <- 'Film production spend, £ million'
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -307,13 +295,8 @@ production_breakdown_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'hetv'
-category_colour <- '#1197FF'
-title <- 'HETV production spend, £ million'
-subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -340,7 +323,6 @@ production_breakdown_revised()
 
 ```{r}
 #| label: set-variables-count
-#| eval: false
 
 sheet_name <- 'uk_production_detail'
 df <- load_data(file_path, sheet_name)
@@ -354,11 +336,7 @@ metric <- 'count'
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
-title <- 'UK production count'
-subtitle <- "For film and HETV starting principal photography in calendar year, 
-            <span style='color:#783df6'>**first reported**</span>"
 all_production_first()
 ```
 
@@ -369,12 +347,7 @@ all_production_first()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
-title <- 'UK production count'
-subtitle <- "For film and HETV starting principal photography in calendar year, 
-            <span style='color:#783df6'>**first reported**</span> and 
-            <span style='color:darkgrey'>**revised**</span>"
 all_production_revised()
 ```
 
@@ -385,9 +358,7 @@ all_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
-title <- 'UK production count'  
 film_hetv_production_revised()
 ```
 
@@ -398,12 +369,7 @@ film_hetv_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
-title <- 'UK production count, proportion (%) by category' 
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            and <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 film_hetv_production_revised_percentage()
 ```
 
@@ -414,13 +380,8 @@ film_hetv_production_revised_percentage()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'film'
-category_colour <- '#e50076'
-title <- 'Film production count'
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in year to March"
 production_revised()
 ```
 
@@ -448,13 +409,8 @@ production_breakdown_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'hetv'
-category_colour <- '#1197FF'
-title <- 'HETV production count'
-subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 production_revised()
 ```
 
