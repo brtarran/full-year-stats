@@ -195,7 +195,7 @@ metric <- 'UK_spend_m'
 
 <div id="left">
 
-In the UK in the rolling year July 2024 to June 2025: 
+In the UK in the 12 months to June 2025: 
 
 * The combined total spend on film and high-end television (HETV) production was £5.7 billion.
 
@@ -219,7 +219,7 @@ all_production_first()
 
 <div id="left">
 
-* Production spend for the year to June 2025 was up 18% on revised 2024 figures. 
+* Combined production spend was up 18% on revised figures for the 12 months ending June 2024. 
 
 </div>
 
@@ -238,6 +238,15 @@ all_production_revised()
 </div>
 
 ##
+
+<div id="left">
+
+* Film accounted for 36% of UK production spend in the 12 months to June 2025.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: film-hetv-production-revised
 #| fig-width: 8
@@ -248,18 +257,29 @@ all_production_revised()
 film_hetv_production_revised()
 ```
 
-##
+</div>
+
 ```{r}
 #| label: film-hetv-production-revised-percentage
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: false
 
 film_hetv_production_revised_percentage()
 ```
 
 ##
+
+<div id="left">
+
+* UK spend on film production was £2.1 billion, up 18% compared with revised figures for the 12 months ending June 2024.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: film-production-revised
 #| fig-width: 8
@@ -271,24 +291,47 @@ category_select <- 'film'
 production_revised()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+BFI-assigned production categories:
+
+* Inward investment features (INW)
+* Domestic UK features (DOM)
+* Co-productions (COP)
+
+See [notes to statistics releases](https://www.bfi.org.uk/industry-data-insights/official-statistics-release-calendar) for full definitions.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: film-production-breakdown-revised
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'film'
-category_colour <- '#e50076'
-title <- 'Film production spend, £ million'
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* UK spend on HETV projects was £3.7 billion, up 18% on revised figures for the 12 months to June 2024.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: hetv-production-revised
 #| fig-width: 8
@@ -300,22 +343,30 @@ category_select <- 'hetv'
 production_revised()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* Growth was driven by an increase in spend on inward investment programmes (INW).
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: hetv-production-breakdown-revised
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'hetv'
-category_colour <- '#1197FF'
-title <- 'HETV production spend, £ million'
-subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 production_breakdown_revised()
 ```
+
+</div>
 
 # Film and HETV production count {background-color="#1197FF"}
 
@@ -392,13 +443,8 @@ production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'film'
-category_colour <- '#e50076'
-title <- 'Film production count'
-subtitle <- "For <span style='color:#e50076'>**film**</span> 
-            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 
@@ -421,13 +467,8 @@ production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: false
 
 category_select <- 'hetv'
-category_colour <- '#1197FF'
-title <- 'HETV production count'
-subtitle <- "For <span style='color:#1197FF'>**HETV**</span> 
-            starting principal photography in year to March"
 production_breakdown_revised()
 ```
 

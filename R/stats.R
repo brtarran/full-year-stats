@@ -704,6 +704,44 @@ production_revised <- function() {
 }
 
 production_breakdown_revised <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend, £ million",
+    count = "count"
+  )
+  
+  category_display_names <- c(
+    film = "Film",
+    hetv = "HETV"
+)
+  
+  category_colours <- c(
+    film = "#e50076",
+    hetv = "#1197FF"
+  )
+
+  metric_display <- metric_display_names[[metric]]
+  category_display <- category_display_names[[category_select]]
+  category_colour <- category_colours[[category_select]]
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
   df_filtered <- df %>%
     filter(category == category_select) %>%
     filter(!production_type %in% c('all', 'inward_investment_and_co_production')) %>%
@@ -741,8 +779,11 @@ production_breakdown_revised <- function() {
       position = position_nudge(x = 0.1)
     ) +  
     labs(
-      title = title, 
-      subtitle = subtitle, 
+      title = paste0("UK production ", metric_display),
+      subtitle = paste0(
+                "<span style='color:", category_colour, "'>**",
+                category_display, "**</span> starting principal photography in the 12 months to ", 
+                latest_month),  
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
