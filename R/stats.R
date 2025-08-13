@@ -348,9 +348,12 @@ all_production_first <- function() {
   df <- df %>%
     mutate(
       year = as.numeric(as.character(year)),
-      quarter = as.numeric(as.character(quarter))
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
     )
   
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
   latest_year <- max(df$year, na.rm = TRUE)
   latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
   
@@ -361,11 +364,8 @@ all_production_first <- function() {
 
   df_revised <- df %>%
     filter(production_type == 'all') %>%
-    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
     group_by(year, category) %>%
-    filter(
-      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
-    ) %>%
+    filter(!(status == 'first_reported' & any(status == 'revised'))) %>%
     ungroup()
 
   df_first <- df %>%
@@ -374,7 +374,6 @@ all_production_first <- function() {
     filter(status == 'first_reported') %>%
     ungroup()
 
-  # Calculate total spend per year
   df_total_revised <- df_revised %>%
     group_by(year) %>%
     summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
@@ -385,21 +384,22 @@ all_production_first <- function() {
     summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup()
 
-  # Create the plot
   ggplot(df_total_revised, aes(x = year, y = total_metric)) +
-    geom_bar(stat = 'identity', fill = 'grey', alpha = 0) +  
-    # Add total spend labels for each year at the top of the stacked bars
+    geom_bar(stat = 'identity', fill = 'grey', alpha = 0) +
     geom_text(aes(label = scales::comma(round(total_metric, 0))),
-              color = 'white', vjust = 1.5, alpha = 0) +  # Position total labels slightly above the top of the bars
-    geom_bar(data = df_total_first, stat = 'identity', fill = '#783df6') +  
-    # Add total spend labels for each year at the top of the stacked bars
+              color = 'white', vjust = 1.5, alpha = 0) +
+    geom_bar(data = df_total_first, stat = 'identity', fill = '#783df6') +
     geom_text(data = df_total_first, aes(label = scales::comma(round(total_metric, 0))),
-              color = 'white', vjust = 1.5) + 
+              color = 'white', vjust = 1.5) +
     labs(
-      title = title, 
-      subtitle = subtitle, 
-      x = 'Year', 
-      y = '') +
+      title = "UK production spend, £ million",
+      subtitle = paste0(
+    "Film and HETV starting principal photography in 12 months to ",
+    latest_month,
+    ", <span style='color:#783df6'>**first reported**</span> figures"),
+      x = 'Year',
+      y = ''
+    ) +
     scale_y_continuous(labels = scales::comma_format()) +
     theme_minimal() +
     theme(
@@ -414,9 +414,12 @@ all_production_revised <- function() {
   df <- df %>%
     mutate(
       year = as.numeric(as.character(year)),
-      quarter = as.numeric(as.character(quarter))
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
     )
   
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
   latest_year <- max(df$year, na.rm = TRUE)
   latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
   
@@ -464,7 +467,11 @@ all_production_revised <- function() {
               color = 'white', vjust = 1.5) + 
     labs(
       title = title, 
-      subtitle = subtitle,
+      subtitle = paste0(
+    "Film and HETV starting principal photography in 12 months to ",
+    latest_month,
+    ", <span style='color:#783df6'>**first reported**</span> and 
+            <span style='color:darkgrey'>**revised**</span> figures"), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +

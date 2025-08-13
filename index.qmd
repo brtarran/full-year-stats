@@ -192,6 +192,17 @@ metric <- 'UK_spend_m'
 ```
 
 ##
+
+<div id="left">
+
+In the UK in the rolling year July 2024 to June 2025: 
+
+* The combined total spend on film and high-end television (HETV) production was £5.7 billion.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: all-production-first
 #| fig-width: 8
@@ -200,12 +211,21 @@ metric <- 'UK_spend_m'
 #| fig-dpi: 150
 
 title <- 'UK production spend, £ million'
-subtitle <- "For film and HETV starting principal photography in calendar year, 
-            <span style='color:#783df6'>**first reported**</span>"
 all_production_first()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* Production spend for the year to June 2025 was up 18% on revised 2024 figures. 
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: all-production-revised
 #| fig-width: 8
@@ -214,11 +234,10 @@ all_production_first()
 #| fig-dpi: 150
 
 title <- 'UK production spend, £ million' 
-subtitle <- "For film and HETV starting principal photography in calendar year, 
-            <span style='color:#783df6'>**first reported**</span> and 
-            <span style='color:darkgrey'>**revised**</span>"
 all_production_revised()
 ```
+
+</div>
 
 ##
 ```{r}
