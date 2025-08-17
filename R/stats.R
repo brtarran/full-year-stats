@@ -800,6 +800,11 @@ production_breakdown_revised <- function() {
 
 certification <- function() {
   # Mappings
+  metric_display_names <- c(
+    uk_spend_m = "UK spend, £ million",
+    count = "count"
+  )
+
   category_display_names <- c(
     film = "Film",
     hetv = "HETV",
@@ -817,7 +822,7 @@ certification <- function() {
     cultural_test = "#e50076",
     co_production = "#1197FF"
   )
-  
+  metric_display <- metric_display_names[[metric]]
   category_display <- category_display_names[[category_select]]
 
   # Make sure year and quarter are numeric
@@ -854,8 +859,8 @@ certification <- function() {
   df_co_labels <- df_filtered %>%
     group_by(year) %>%
     summarise(
-      total_height = sum(uk_spend_m, na.rm = TRUE),
-      co_production_sum = sum(uk_spend_m[cert_type == "co_production"], na.rm = TRUE)
+      total_height = sum(.data[[metric]], na.rm = TRUE),
+      co_production_sum = sum(.data[[metric]][cert_type == "co_production"], na.rm = TRUE)
     ) %>%
     filter(co_production_sum > 0) %>%  # only years with co_production
     mutate(
@@ -863,13 +868,13 @@ certification <- function() {
       y_pos = total_height + 0.02 * max(total_height)  # add a small offset above the bar
     )
 
-  ggplot(df_filtered, aes(x = year, y = uk_spend_m, fill = cert_type)) +
+  ggplot(df_filtered, aes(x = year, y = .data[[metric]], fill = cert_type)) +
     geom_bar(stat = "identity", position = "stack") +
 
     # cultural_test labels inside their segment
     geom_text(
       data = df_filtered %>% filter(cert_type == "cultural_test"),
-      aes(label = scales::comma(round(uk_spend_m, 0))),
+      aes(label = scales::comma(round(.data[[metric]], 0))),
       position = position_stack(vjust = 0.5),
       color = "white"
     ) +
@@ -884,7 +889,7 @@ certification <- function() {
     
     scale_fill_manual(values = cert_type_colours) +
     labs(
-      title = paste0(category_display, " ", cert_status_select, " certifications, UK spend, £ million"), 
+      title = paste0(category_display, " ", cert_status_select, " certifications, ", metric_display), 
       subtitle = paste0("All ", cert_type_text, " certifications issued in the 12 months to ", latest_month),
       x = "Year",
       y = ""

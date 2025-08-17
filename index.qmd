@@ -563,7 +563,7 @@ df <- load_data(file_path, sheet_name)
 
 ##
 ```{r}
-#| label: film-cert-final
+#| label: film-cert-final-count
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
@@ -571,25 +571,27 @@ df <- load_data(file_path, sheet_name)
 
 category_select <- 'film'
 cert_status_select <- 'final'
+metric <- 'count'
 certification()
 ```
 
 ##
 ```{r}
-#| label: film-cert-interim
+#| label: film-cert-final-spend
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
 
 category_select <- 'film'
-cert_status_select <- 'interim'
+cert_status_select <- 'final'
+metric <- 'uk_spend_m'
 certification()
 ```
 
 ##
 ```{r}
-#| label: hetv-cert-final
+#| label: hetv-cert-final-count
 #| fig-width: 8
 #| fig-height: 6
 #| fig-align: center
@@ -597,6 +599,105 @@ certification()
 
 category_select <- 'hetv'
 cert_status_select <- 'final'
+metric <- 'count'
+certification()
+```
+
+##
+```{r}
+#| label: hetv-cert-final-spend
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'hetv'
+cert_status_select <- 'final'
+metric <- 'uk_spend_m'
+certification()
+```
+
+##
+```{r}
+#| label: animation-cert-final-count
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'animation_tv'
+cert_status_select <- 'final'
+metric <- 'count'
+certification()
+```
+
+##
+```{r}
+#| label: animation-cert-final-spend
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'animation_tv'
+cert_status_select <- 'final'
+metric <- 'uk_spend_m'
+certification()
+```
+
+##
+```{r}
+#| label: childrens-cert-final-count
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'childrens_tv'
+cert_status_select <- 'final'
+metric <- 'count'
+certification()
+```
+
+##
+```{r}
+#| label: childrens-cert-final-spend
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'childrens_tv'
+cert_status_select <- 'final'
+metric <- 'uk_spend_m'
+certification()
+```
+
+##
+```{r}
+#| label: video-games-cert-final-count
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'video_games'
+cert_status_select <- 'final'
+metric <- 'count'
+certification()
+```
+
+##
+```{r}
+#| label: video-games-cert-final-spend
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'video_games'
+cert_status_select <- 'final'
+metric <- 'uk_spend_m'
 certification()
 ```
 
