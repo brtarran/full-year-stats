@@ -161,8 +161,8 @@ uk_market_share_indie()
 
 <div id="left">
 
-* The total market share of all UK qualifying films was just shy of 45%, almost 20 percentage points higher than H1 2024’s UK qualifying share (26%).
-* (2025 figures in chart sum to 44% due to rounding.)
+* The total market share of all UK qualifying films was just shy of 45%, almost 20 percentage points higher than H1 2024’s UK qualifying share.
+* *Note*: 2025 figures in chart sum to 44% due to rounding.
 
 </div>
 
@@ -562,6 +562,18 @@ df <- load_data(file_path, sheet_name)
 ```
 
 ##
+
+<div id="left">
+
+In the 12 months to June 2025:
+
+* A total of 597 films received final certification, either under the cultural test or as an official co-production.
+* Certification is required to access UK tax reliefs and credits for audiovisual and video game expenditure.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: film-cert-final-count
 #| fig-width: 8
@@ -575,7 +587,19 @@ metric <- 'count'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* Films achieving final certification in the 12 months to June 2025 had an associated UK production spend of £2.6 billion.
+* Films and other productions can apply for final certification when they have completed production and are ready to be released.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: film-cert-final-spend
 #| fig-width: 8
@@ -589,7 +613,19 @@ metric <- 'uk_spend_m'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* 300 HETV titles received final certification through the cultural test in the 12 months to June 2025.
+* There was one co-production with final certification but its details are not included for disclosure control reasons.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: hetv-cert-final-count
 #| fig-width: 8
@@ -603,7 +639,18 @@ metric <- 'count'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* HETV productions receiving final certification under the cultural test in the 12 months to June 2025 had a UK production spend of £5.3 billion.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: hetv-cert-final-spend
 #| fig-width: 8
@@ -617,7 +664,18 @@ metric <- 'uk_spend_m'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* 94 animation television programmes received final certification under the cultural test in the 12 months to June 2025.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: animation-cert-final-count
 #| fig-width: 8
@@ -631,7 +689,18 @@ metric <- 'count'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* Animation TV productions receiving final certification under the cultural test in the 12 months to June 2025 had a UK production spend of £208 million.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: animation-cert-final-spend
 #| fig-width: 8
@@ -645,7 +714,19 @@ metric <- 'uk_spend_m'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* 119 children’s television programmes received final certification under the cultural test in the 12 months to June 2025.
+* There was one co-production with final certification but its details are not included for disclosure control reasons.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: childrens-cert-final-count
 #| fig-width: 8
@@ -659,7 +740,18 @@ metric <- 'count'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* Children's TV productions receiving final certification under the cultural test in the 12 months to June 2025 had a UK production spend of £221 million -- due, in part, to a small number of high-budget productions.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: childrens-cert-final-spend
 #| fig-width: 8
@@ -673,7 +765,19 @@ metric <- 'uk_spend_m'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* 257 video games received final certification in the 12 months to June 2025.
+* Video games can only be certified under the cultural test.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: video-games-cert-final-count
 #| fig-width: 8
@@ -687,7 +791,19 @@ metric <- 'count'
 certification()
 ```
 
+</div>
+
 ##
+
+<div id="left">
+
+* Video games receiving final certification in the 12 months to June 2025 had a UK production spend of £559 million.
+* This is the second highest UK spend figure on record.
+
+</div>
+
+<div id="right">
+
 ```{r}
 #| label: video-games-cert-final-spend
 #| fig-width: 8
@@ -700,6 +816,8 @@ cert_status_select <- 'final'
 metric <- 'uk_spend_m'
 certification()
 ```
+
+</div>
 
 # Sources {background-color="#e50076"}
 
