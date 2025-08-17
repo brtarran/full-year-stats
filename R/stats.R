@@ -7,13 +7,14 @@ library(dplyr)
 library(scales)
 library(ggtext)
 library(ggrepel)
+library(lubridate)
+library(purrr)
 
 
 # Load data
 
 load_data <- function(file_path, sheet_name) {
-  df <- read_xlsx(file_path, sheet = sheet_name) %>%
-    mutate(year = as.factor(year))
+  df <- read_xlsx(file_path, sheet = sheet_name)
   return(df)
 }
 
@@ -24,26 +25,80 @@ load_data <- function(file_path, sheet_name) {
 
 
 uk_box_office <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+  
+  # Plot
   ggplot(df, aes(x = year, y = uk_box_office_m)) +
-    geom_bar(stat = 'identity', fill = '#e50076') +  
-    geom_text(aes(label = scales::comma(uk_box_office_m)), vjust = 1.5, color = 'white') + 
+    geom_bar(stat = 'identity', fill = '#e50076') +
+    geom_text(aes(label = scales::comma(round(uk_box_office_m, 0))), 
+              vjust = 1.5, color = 'white') +
     labs(
-      title = 'UK box office, £ million', 
-      subtitle = 'All titles on release, including event titles', 
-      x = 'Year', 
-      y = '') +
-    scale_y_continuous(labels = scales::comma_format()) + 
+      title = 'UK box office, £ million',
+      subtitle = paste0('All titles on release, including event titles, January to ', latest_month),
+      x = 'Year',
+      y = ''
+    ) +
+    scale_y_continuous(labels = scales::comma_format()) +
     theme_minimal()
 }
 
 
 uk_roi_box_office <- function() {
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+  
+  # Plot
   ggplot(df, aes(x = year, y = uk_roi_box_office_m)) +
     geom_bar(stat = 'identity', fill = '#783df6') +  
     geom_text(aes(label = scales::comma(uk_roi_box_office_m)), vjust = 1.5, color = 'white') + 
     labs(
       title = 'UK and Republic of Ireland box office, £ million', 
-      subtitle = "<span style='color:#783df6'>All films</span> released in calendar year, excluding event titles",
+      subtitle = paste0("<span style='color:#783df6'>All films</span> released in calendar year, excluding event titles, January to ", latest_month),
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
@@ -134,11 +189,36 @@ uk_market_share_indie <- function() {
 
 
 uk_market_share_percent <- function() {
-  df$year <- as.numeric(as.character(df$year))
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year, film_type)
 
   last_5_years <- max(df$year, na.rm = TRUE) - 5
   df_filtered <- df %>%
     filter(year >= last_5_years)
+
+  df_filtered$film_type <- factor(df_filtered$film_type, levels = c("other_uk_qualifying", "uk_independent"))
 
   ggplot(df_filtered, aes(x = factor(year), y = market_share_percent)) +
     # Layer 1: All films (no stacking)
@@ -155,8 +235,8 @@ uk_market_share_percent <- function() {
               color = 'white') +
     labs(
       title = 'Share of UK and Republic of Ireland box office, %',
-      subtitle = "For <span style='color:#e50076'>**all UK independent films**</span> 
-                  and <span style='color:#1197FF'>**other UK qualifying films**</span>",
+      subtitle = paste0("For <span style='color:#e50076'>**all UK independent films**</span> 
+                  and <span style='color:#1197FF'>**other UK qualifying films**</span> released January to ", latest_month),
       x = 'Year',
       y = '',
       fill = 'Film type') +
@@ -177,18 +257,41 @@ uk_market_share_percent <- function() {
 
 uk_admissions <- function() {
   df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+    )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
+  
+  df_filtered <- df %>%
+    filter(quarter <= latest_quarter) %>%
     group_by(year) %>%
-    summarise(admissions_m = sum(admissions_m, na.rm = TRUE))
-
-  ggplot(df, aes(x = year, y = admissions_m)) +
-    geom_bar(stat = 'identity', fill = '#e50076') +  
-    geom_text(aes(label = scales::comma(round(admissions_m, 0))), vjust = 1.5, color = 'white') + 
+    summarise(admissions_m = sum(admissions_m, na.rm = TRUE), .groups = "drop")
+  
+  ggplot(df_filtered, aes(x = year, y = admissions_m)) +
+    geom_bar(stat = 'identity', fill = '#e50076') +
+    geom_text(aes(label = scales::comma(round(admissions_m, 0))),
+              vjust = 1.5, color = 'white') +
     labs(
       title = 'UK admissions, million',
-      subtitle = 'All titles on release, including event titles',
-      x = 'Year', 
-      y = '') +
-    scale_y_continuous(labels = scales::comma_format()) + 
+      subtitle = paste0('All titles on release, including event titles, January to ', 
+                        latest_month),
+      x = 'Year',
+      y = ''
+    ) +
+    scale_y_continuous(labels = scales::comma_format()) +
     theme_minimal()
 }
 
@@ -197,23 +300,38 @@ uk_admissions_month <- function() {
   df <- df %>%
     mutate(
       year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      month_num = month(match(tolower(month), tolower(month.name))), # convert month names to numbers
       month = factor(month, levels = month.name),
       latest_year = max(year, na.rm = TRUE),
       color = ifelse(year == latest_year, "#e50076", "#D3D3D3")
     )
+  
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Find the latest month number in the latest year & quarter
+  latest_month_num <- df %>%
+    filter(year == latest_year, quarter == latest_quarter) %>%
+    summarise(max_month = max(month_num, na.rm = TRUE)) %>%
+    pull(max_month)
+  
+  # Convert back to month name
+  latest_month <- month.name[latest_month_num]
 
   ggplot(df, aes(x = month, y = admissions_m, group = year, color = factor(year))) +
     geom_line(aes(color = color), size = 1) +
     geom_point(aes(color = color), size = 2) +
     geom_text(
-      data = df %>% filter(month == "December"),
+      data = df %>% group_by(year) %>% filter(row_number() == n()),
       aes(label = year, x = month, y = admissions_m, color = color),
       hjust = 0, vjust = 0.5, size = 5, fontface = "bold",
-      position = position_nudge(x = 0.1)
+      position = position_nudge(x = 0.05)
     ) +
     labs(
       title = 'UK admissions, million',
-      subtitle = 'All titles on release, including event titles',
+      subtitle = paste0('All titles on release, including event titles, January to ', 
+                        latest_month),      
       x = 'Month',
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
@@ -227,13 +345,36 @@ uk_admissions_month <- function() {
 # Production
 
 all_production_first <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend, £ million",
+    count = "count"
+  )
+
+  metric_display <- metric_display_names[[metric]]
+  
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
   df_revised <- df %>%
     filter(production_type == 'all') %>%
-    # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
     group_by(year, category) %>%
-    filter(
-      !(status == 'first_reported' & any(status == 'revised'))  # Exclude 'first_reported' if 'revised' is present for the same year
-    ) %>%
+    filter(!(status == 'first_reported' & any(status == 'revised'))) %>%
     ungroup()
 
   df_first <- df %>%
@@ -242,7 +383,6 @@ all_production_first <- function() {
     filter(status == 'first_reported') %>%
     ungroup()
 
-  # Calculate total spend per year
   df_total_revised <- df_revised %>%
     group_by(year) %>%
     summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
@@ -253,21 +393,22 @@ all_production_first <- function() {
     summarise(total_metric = sum(.data[[metric]], na.rm = TRUE)) %>%
     ungroup()
 
-  # Create the plot
   ggplot(df_total_revised, aes(x = year, y = total_metric)) +
-    geom_bar(stat = 'identity', fill = 'grey', alpha = 0) +  
-    # Add total spend labels for each year at the top of the stacked bars
+    geom_bar(stat = 'identity', fill = 'grey', alpha = 0) +
     geom_text(aes(label = scales::comma(round(total_metric, 0))),
-              color = 'white', vjust = 1.5, alpha = 0) +  # Position total labels slightly above the top of the bars
-    geom_bar(data = df_total_first, stat = 'identity', fill = '#783df6') +  
-    # Add total spend labels for each year at the top of the stacked bars
+              color = 'white', vjust = 1.5, alpha = 0) +
+    geom_bar(data = df_total_first, stat = 'identity', fill = '#783df6') +
     geom_text(data = df_total_first, aes(label = scales::comma(round(total_metric, 0))),
-              color = 'white', vjust = 1.5) + 
+              color = 'white', vjust = 1.5) +
     labs(
-      title = title, 
-      subtitle = subtitle, 
-      x = 'Year', 
-      y = '') +
+      title = paste0("UK production ", metric_display),
+      subtitle = paste0(
+    "Film and HETV starting principal photography in the 12 months to ",
+    latest_month,
+    ", <span style='color:#783df6'>**first reported**</span>"),
+      x = 'Year',
+      y = ''
+    ) +
     scale_y_continuous(labels = scales::comma_format()) +
     theme_minimal() +
     theme(
@@ -278,6 +419,32 @@ all_production_first <- function() {
 
 
 all_production_revised <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend, £ million",
+    count = "count"
+  )
+
+  metric_display <- metric_display_names[[metric]]  
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
   df_revised <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
@@ -316,8 +483,12 @@ all_production_revised <- function() {
     geom_text(aes(label = scales::comma(round(total_metric, 0))),
               color = 'white', vjust = 1.5) + 
     labs(
-      title = title, 
-      subtitle = subtitle,
+      title = paste0("UK production ", metric_display), 
+      subtitle = paste0(
+    "Film and HETV starting principal photography in the 12 months to ",
+    latest_month,
+    ", <span style='color:#783df6'>**first reported**</span> and 
+            <span style='color:darkgrey'>**revised**</span>"), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -330,6 +501,32 @@ all_production_revised <- function() {
 
 
 film_hetv_production_revised <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend, £ million",
+    count = "count"
+  )
+
+  metric_display <- metric_display_names[[metric]]
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+    
   df_filtered <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
@@ -345,8 +542,10 @@ film_hetv_production_revised <- function() {
               position = position_stack(vjust = 0.9), 
               color = 'white') + 
     labs(
-      title = title, 
-      subtitle = subtitle,
+      title = paste0("UK production ", metric_display),
+      subtitle = paste0("<span style='color:#e50076'>**Film**</span> 
+            and <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in the 12 months to ", latest_month), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -361,6 +560,32 @@ film_hetv_production_revised <- function() {
 
 
 film_hetv_production_revised_percentage <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend",
+    count = "count"
+  )
+
+  metric_display <- metric_display_names[[metric]]  
+  
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+     
   df_filtered <- df %>%
     filter(production_type == 'all') %>%
     # For each year, if 'revised' exists, keep only 'revised' or 'first_reported' if 'revised' doesn't exist
@@ -382,8 +607,10 @@ film_hetv_production_revised_percentage <- function() {
               position = position_stack(vjust = 0.5), 
               color = 'white') +  # Position the labels at the center of each segment
     labs(
-      title = title, 
-      subtitle = subtitle, 
+      title = paste0("UK production ", metric_display, ", % by category"),
+      subtitle = paste0("<span style='color:#e50076'>**Film**</span> 
+            and <span style='color:#1197FF'>**HETV**</span> 
+            starting principal photography in the 12 months to ", latest_month), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::percent_format()) +
@@ -398,6 +625,44 @@ film_hetv_production_revised_percentage <- function() {
 
 
 production_revised <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend, £ million",
+    count = "count"
+  )
+  
+  category_display_names <- c(
+    film = "Film",
+    hetv = "HETV"
+)
+  
+  category_colours <- c(
+    film = "#e50076",
+    hetv = "#1197FF"
+  )
+
+  metric_display <- metric_display_names[[metric]]
+  category_display <- category_display_names[[category_select]]
+  category_colour <- category_colours[[category_select]]
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+    
   df_filtered <- df %>%
     filter(category == category_select) %>%
     filter(!production_type %in% c('all', 'inward_investment_and_co_production')) %>%
@@ -424,8 +689,11 @@ production_revised <- function() {
               vjust = 1.5), 
               color = 'white') + 
     labs(
-      title = title, 
-      subtitle = subtitle, 
+      title = paste0("UK production ", metric_display),
+      subtitle = paste0(
+                "<span style='color:", category_colour, "'>**",
+                category_display, "**</span> starting principal photography in the 12 months to ", 
+                latest_month), 
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -437,6 +705,44 @@ production_revised <- function() {
 }
 
 production_breakdown_revised <- function() {
+  # Mappings
+  metric_display_names <- c(
+    UK_spend_m = "spend, £ million",
+    count = "count"
+  )
+  
+  category_display_names <- c(
+    film = "Film",
+    hetv = "HETV"
+)
+  
+  category_colours <- c(
+    film = "#e50076",
+    hetv = "#1197FF"
+  )
+
+  metric_display <- metric_display_names[[metric]]
+  category_display <- category_display_names[[category_select]]
+  category_colour <- category_colours[[category_select]]
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
   df_filtered <- df %>%
     filter(category == category_select) %>%
     filter(!production_type %in% c('all', 'inward_investment_and_co_production')) %>%
@@ -462,7 +768,7 @@ production_breakdown_revised <- function() {
       segment.color = NA  # Removes connector lines
     ) +
     geom_text(
-      data = df_filtered %>% filter(year == '2024') %>%
+      data = df_filtered %>% filter(year == '2025') %>%
       mutate(production_type = recode(production_type, 
         'inward_investment' = 'INW',
         'co_production' = 'COP',  
@@ -474,8 +780,11 @@ production_breakdown_revised <- function() {
       position = position_nudge(x = 0.1)
     ) +  
     labs(
-      title = title, 
-      subtitle = subtitle, 
+      title = paste0("UK production ", metric_display),
+      subtitle = paste0(
+                "<span style='color:", category_colour, "'>**",
+                category_display, "**</span> starting principal photography in the 12 months to ", 
+                latest_month),  
       x = 'Year', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -485,3 +794,110 @@ production_breakdown_revised <- function() {
       plot.subtitle = element_textbox_simple()
     )
 }
+
+
+# Certification
+
+certification <- function() {
+  # Mappings
+  metric_display_names <- c(
+    uk_spend_m = "UK spend, £ million",
+    count = "count"
+  )
+
+  category_display_names <- c(
+    film = "Film",
+    hetv = "HETV",
+    animation_tv = "Animation TV",
+    childrens_tv = "Children's TV",
+    video_games = "Video games"
+  )
+
+  cert_type_display_names <- c(
+    cultural_test = "cultural test",
+    co_production = "co-production"
+  )
+
+  cert_type_colours <- c(
+    cultural_test = "#e50076",
+    co_production = "#1197FF"
+  )
+  metric_display <- metric_display_names[[metric]]
+  category_display <- category_display_names[[category_select]]
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
+  df_filtered <- df %>%
+    mutate(year = as.factor(year)) %>%
+    filter(category == category_select) %>%
+    filter(cert_status == cert_status_select)
+
+  # Build dynamic coloured cert_type names for title
+  cert_types_present <- unique(df_filtered$cert_type)
+  cert_type_labels <- purrr::map_chr(cert_types_present, function(ct) {
+    paste0("<span style='color:", cert_type_colours[[ct]], "'>", cert_type_display_names[[ct]], "</span>")
+  })
+  cert_type_text <- paste(cert_type_labels, collapse = " and ")
+
+  # Compute top-of-bar position for co_production labels
+  df_co_labels <- df_filtered %>%
+    group_by(year) %>%
+    summarise(
+      total_height = sum(.data[[metric]], na.rm = TRUE),
+      co_production_sum = sum(.data[[metric]][cert_type == "co_production"], na.rm = TRUE)
+    ) %>%
+    filter(co_production_sum > 0) %>%  # only years with co_production
+    mutate(
+      label = scales::comma(round(co_production_sum, 0)),
+      y_pos = total_height + 0.02 * max(total_height)  # add a small offset above the bar
+    )
+
+  ggplot(df_filtered, aes(x = year, y = .data[[metric]], fill = cert_type)) +
+    geom_bar(stat = "identity", position = "stack") +
+
+    # cultural_test labels inside their segment
+    geom_text(
+      data = df_filtered %>% filter(cert_type == "cultural_test"),
+      aes(label = scales::comma(round(.data[[metric]], 0))),
+      position = position_stack(vjust = 0.5),
+      color = "white"
+    ) +
+
+  # co_production labels above the stacked bar
+  geom_text(
+    data = df_co_labels,
+    aes(x = year, y = y_pos, label = label),
+    color = cert_type_colours[["co_production"]],
+    inherit.aes = FALSE
+  ) +
+    
+    scale_fill_manual(values = cert_type_colours) +
+    labs(
+      title = paste0(category_display, " ", cert_status_select, " certifications, ", metric_display), 
+      subtitle = paste0("All ", cert_type_text, " certifications issued in the 12 months to ", latest_month),
+      x = "Year",
+      y = ""
+    ) +
+    scale_y_continuous(labels = scales::comma_format()) +
+    theme_minimal() +
+    theme(
+      legend.position = "none",
+      plot.subtitle = ggtext::element_markdown()
+    )
+  }
