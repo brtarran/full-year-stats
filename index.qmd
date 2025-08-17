@@ -199,7 +199,7 @@ metric <- 'UK_spend_m'
 In the UK, in the 12 months to June 2025: 
 
 * The combined total spend on film and high-end television (HETV) production was £5.7 billion.
-* This graph shows 'first reported' figures for production spend.
+* This graph shows the figures that were 'first reported' for production spend in each 12-month period. 
 
 </div>
 
@@ -221,7 +221,7 @@ all_production_first()
 
 <div id="left">
 
-* Production data is revised every quarter to account for lags in obtaining complete data across all types of productions.
+* Production data is revised every period to account for lags in obtaining complete data across all types of productions.
 * Combined spend for the 12 months to June 2025 was up 18% on revised figures for the previous 12-month period.
 
 </div>
@@ -552,10 +552,59 @@ production_breakdown_revised()
 
 </div>
 
+# Certification {background-color="#e94e24"}
+
+```{r}
+#| label: load-cert
+
+sheet_name <- 'certification'
+df <- load_data(file_path, sheet_name)
+```
+
+##
+```{r}
+#| label: film-cert-final
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'film'
+cert_status_select <- 'final'
+certification()
+```
+
+##
+```{r}
+#| label: film-cert-interim
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'film'
+cert_status_select <- 'interim'
+certification()
+```
+
+##
+```{r}
+#| label: hetv-cert-final
+#| fig-width: 8
+#| fig-height: 6
+#| fig-align: center
+#| fig-dpi: 150
+
+category_select <- 'hetv'
+cert_status_select <- 'final'
+certification()
+```
+
 # Sources {background-color="#e50076"}
 
-* Box office: Comscore
+* Box office: Comscore, BFI Research & Statistics Unit
 * Admissions: Cinema Advertising Association
-* Production: BFI Research & Statistics Unit 
+* Production: BFI Research & Statistics Unit
+* Certification: BFI Research & Statistics Unit, BFI Certification Unit 
 
 See [bfi.org.uk](https://www.bfi.org.uk/industry-data-insights) for more industry data and insights

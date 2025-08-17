@@ -8,6 +8,7 @@ library(scales)
 library(ggtext)
 library(ggrepel)
 library(lubridate)
+library(purrr)
 
 
 # Load data
@@ -793,3 +794,105 @@ production_breakdown_revised <- function() {
       plot.subtitle = element_textbox_simple()
     )
 }
+
+
+# Certification
+
+certification <- function() {
+  # Mappings
+  category_display_names <- c(
+    film = "Film",
+    hetv = "HETV",
+    animation_tv = "Animation TV",
+    childrens_tv = "Children's TV",
+    video_games = "Video games"
+  )
+
+  cert_type_display_names <- c(
+    cultural_test = "cultural test",
+    co_production = "co-production"
+  )
+
+  cert_type_colours <- c(
+    cultural_test = "#e50076",
+    co_production = "#1197FF"
+  )
+  
+  category_display <- category_display_names[[category_select]]
+
+  # Make sure year and quarter are numeric
+  df <- df %>%
+    mutate(
+      year = as.numeric(as.character(year)),
+      quarter = as.numeric(as.character(quarter)),
+      rolling_end = as.Date(rolling_end, format = "%d/%m/%Y")
+    )
+  
+  # Get latest rolling_end month-year
+  latest_month <- format(max(df$rolling_end, na.rm = TRUE), "%B")
+  latest_year <- max(df$year, na.rm = TRUE)
+  latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
+  
+  # Filter data for all years but only latest_quarter
+  df <- df %>%
+    filter(quarter == latest_quarter) %>%
+    group_by(year)
+
+  df_filtered <- df %>%
+    mutate(year = as.factor(year)) %>%
+    filter(category == category_select) %>%
+    filter(cert_status == cert_status_select)
+
+  # Build dynamic coloured cert_type names for title
+  cert_types_present <- unique(df_filtered$cert_type)
+  cert_type_labels <- purrr::map_chr(cert_types_present, function(ct) {
+    paste0("<span style='color:", cert_type_colours[[ct]], "'>", cert_type_display_names[[ct]], "</span>")
+  })
+  cert_type_text <- paste(cert_type_labels, collapse = " and ")
+
+  # Compute top-of-bar position for co_production labels
+  df_co_labels <- df_filtered %>%
+    group_by(year) %>%
+    summarise(
+      total_height = sum(uk_spend_m, na.rm = TRUE),
+      co_production_sum = sum(uk_spend_m[cert_type == "co_production"], na.rm = TRUE)
+    ) %>%
+    filter(co_production_sum > 0) %>%  # only years with co_production
+    mutate(
+      label = scales::comma(round(co_production_sum, 0)),
+      y_pos = total_height + 0.02 * max(total_height)  # add a small offset above the bar
+    )
+
+  ggplot(df_filtered, aes(x = year, y = uk_spend_m, fill = cert_type)) +
+    geom_bar(stat = "identity", position = "stack") +
+
+    # cultural_test labels inside their segment
+    geom_text(
+      data = df_filtered %>% filter(cert_type == "cultural_test"),
+      aes(label = scales::comma(round(uk_spend_m, 0))),
+      position = position_stack(vjust = 0.5),
+      color = "white"
+    ) +
+
+  # co_production labels above the stacked bar
+  geom_text(
+    data = df_co_labels,
+    aes(x = year, y = y_pos, label = label),
+    color = cert_type_colours[["co_production"]],
+    inherit.aes = FALSE
+  ) +
+    
+    scale_fill_manual(values = cert_type_colours) +
+    labs(
+      title = paste0(category_display, " ", cert_status_select, " certifications, UK spend, £ million"), 
+      subtitle = paste0("All ", cert_type_text, " certifications issued in the 12 months to ", latest_month),
+      x = "Year",
+      y = ""
+    ) +
+    scale_y_continuous(labels = scales::comma_format()) +
+    theme_minimal() +
+    theme(
+      legend.position = "none",
+      plot.subtitle = ggtext::element_markdown()
+    )
+  }
