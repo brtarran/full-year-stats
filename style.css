@@ -14,3 +14,10 @@
   z-index:-10;
   width:75%;
 }
+
+#left p,
+#left li {
+    color: #4a4a4a;
+    font-size: 0.75em;
+    margin: 10px 0;
+}
