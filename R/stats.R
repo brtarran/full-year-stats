@@ -13,27 +13,63 @@ library(purrr)
 
 # Load data and define key variables
 
-load_data <- function(file_path, sheet_name) {
+load_data <- function(file_path, sheet_name, type = c("boxoffice", "production")) {
+  type <- match.arg(type)
+
+  # Read and clean
   df <- read_xlsx(file_path, sheet = sheet_name) %>%
     mutate(
       year = as.numeric(as.character(year)),
       quarter = as.numeric(as.character(quarter)),
-      month_num = month(match(tolower(month), tolower(month.name))) # convert month names to numbers
+      month_num = match(tolower(month), tolower(month.name)) # convert month names to numbers
     )
 
+  # Latest period
   latest_year <- max(df$year, na.rm = TRUE)
   latest_quarter <- max(df$quarter[df$year == latest_year], na.rm = TRUE)
   latest_month_num <- df %>%
     filter(year == latest_year, quarter == latest_quarter) %>%
     summarise(max_month = max(month_num, na.rm = TRUE)) %>%
     pull(max_month)
-    latest_month <- month.name[latest_month_num]
+  latest_month <- month.name[latest_month_num]
 
+  # Label functions
+  make_boxoffice_label <- function(year, latest_month_num) {
+    period <- case_when(
+      latest_month_num == 3  ~ "Q1",
+      latest_month_num == 6  ~ "H1",
+      latest_month_num == 9  ~ "Q1–3",
+      latest_month_num == 12 ~ "FY",
+      TRUE ~ NA_character_
+    )
+    paste0(period, " ", year)
+  }
+
+  make_production_label <- function(year, latest_month_num) {
+    paste0("YE ", month.abb[latest_month_num], " ", year)
+  }
+
+  # Add labels into dataframe
+  df <- df %>%
+    mutate(
+      label = case_when(
+        type == "boxoffice"  ~ make_boxoffice_label(year, latest_month_num),
+        type == "production" ~ make_production_label(year, latest_month_num)
+      )
+    )
+  
+  latest_label <- tail(df$label, 1)  # last row's label
+  latest_period <- sub(" .*", "", latest_label) 
+
+  # Return everything
   return(list(
     data = df,
     latest_year = latest_year,
     latest_quarter = latest_quarter,
-    latest_month = latest_month
+    latest_month = latest_month,
+    latest_month_num = latest_month_num,
+    latest_label = latest_label,
+    latest_period = latest_period
   ))
 }
 
@@ -42,20 +78,23 @@ load_data <- function(file_path, sheet_name) {
 
 # Box office
 
-
 uk_box_office <- function() {
   df <- data_and_vars$data %>%
     filter(quarter == data_and_vars$latest_quarter) %>%
-    group_by(year)
+    group_by(year, label) %>%
+    ungroup() %>%
+    # Order labels chronologically using year + month_num
+    mutate(label = factor(label, levels = label[order(year, month_num)]))
 
-  ggplot(df, aes(x = year, y = uk_box_office_m)) +
+  ggplot(df, aes(x = label, y = uk_box_office_m)) +
     geom_bar(stat = 'identity', fill = '#e50076') +
     geom_text(aes(label = scales::comma(round(uk_box_office_m, 0))), 
               vjust = 1.5, color = 'white') +
     labs(
-      title = paste0('UK box office, January to ', data_and_vars$latest_month, ', £ million'),
+      title = paste0('UK box office, January to ', data_and_vars$latest_month, ' (', 
+                      data_and_vars$latest_period, '), £ million'),
       subtitle = 'All titles on release, including event titles',
-      x = 'Year',
+      x = '',
       y = ''
     ) +
     scale_y_continuous(labels = scales::comma_format()) +
@@ -66,16 +105,20 @@ uk_box_office <- function() {
 uk_roi_box_office <- function() {
   df <- data_and_vars$data %>%
     filter(quarter == data_and_vars$latest_quarter) %>%
-    group_by(year)
+    group_by(year, label) %>%
+    ungroup() %>%
+    # Order labels chronologically using year + month_num
+    mutate(label = factor(label, levels = label[order(year, month_num)]))
   
   # Plot
-  ggplot(df, aes(x = year, y = uk_roi_box_office_m)) +
+  ggplot(df, aes(x = label, y = uk_roi_box_office_m)) +
     geom_bar(stat = 'identity', fill = '#783df6') +  
     geom_text(aes(label = scales::comma(uk_roi_box_office_m)), vjust = 1.5, color = 'white') + 
     labs(
-      title = paste0('UK and Republic of Ireland box office, January to ', data_and_vars$latest_month, ', £ million'),
+      title = paste0('UK and Republic of Ireland box office, January to ', data_and_vars$latest_month, ' (', 
+                      data_and_vars$latest_period, '), £ million'),
       subtitle = "<span style='color:#783df6'>All films</span> released in calendar year, excluding event titles",
-      x = 'Year', 
+      x = '', 
       y = '') +
     scale_y_continuous(labels = scales::comma_format()) + 
     theme_minimal() +
@@ -158,14 +201,16 @@ uk_market_share_indie <- function() {
 
 
 uk_market_share_percent <- function() {
-  # Filter data for all years but only latest_quarter
   df <- data_and_vars$data %>%
     filter(quarter == data_and_vars$latest_quarter) %>%
-    group_by(year)
+    group_by(year, label) %>%
+    ungroup() %>%
+    # Order labels chronologically using year + month_num, removing duplicates
+    mutate(label = factor(label, levels = unique(label[order(year, month_num)])))
 
   df$film_type <- factor(df$film_type, levels = c("other_uk_qualifying", "uk_independent"))
 
-  ggplot(df, aes(x = factor(year), y = market_share_percent)) +
+  ggplot(df, aes(x = label, y = market_share_percent)) +
     # Layer 1: All films (no stacking)
     geom_bar(aes(fill = "all_titles"), 
              stat = 'identity', position = 'identity', na.rm = TRUE) +
@@ -179,10 +224,11 @@ uk_market_share_percent <- function() {
               position = position_stack(vjust = 0.5),
               color = 'white') +
     labs(
-      title = paste0('UK and Republic of Ireland box office, January to ', data_and_vars$latest_month, ', %'),
+      title = paste0('UK and Republic of Ireland box office, January to ', data_and_vars$latest_month, ' (', 
+                      data_and_vars$latest_period, '), %'),
       subtitle = "For <span style='color:#e50076'>**all UK independent films**</span> 
                   and <span style='color:#1197FF'>**other UK qualifying films**</span>",
-      x = 'Year',
+      x = '',
       y = '',
       fill = 'Film type') +
     scale_y_continuous(labels = function(x) paste0(x, "%")) +
@@ -203,17 +249,25 @@ uk_market_share_percent <- function() {
 uk_admissions <- function() {
   df <- data_and_vars$data %>%
     filter(quarter <= data_and_vars$latest_quarter) %>%
-    group_by(year) %>%
-    summarise(admissions_m = sum(admissions_m, na.rm = TRUE), .groups = "drop")
+    group_by(year, label) %>%
+    summarise(
+      admissions_m = sum(admissions_m, na.rm = TRUE),
+      # get the latest month_num within this label for ordering
+      month_num = max(month_num, na.rm = TRUE),
+      .groups = "drop"
+    ) %>%
+    # Order labels chronologically
+    mutate(label = factor(label, levels = unique(label[order(year, month_num)])))
   
-  ggplot(df, aes(x = year, y = admissions_m)) +
+  ggplot(df, aes(x = label, y = admissions_m)) +
     geom_bar(stat = 'identity', fill = '#e50076') +
     geom_text(aes(label = scales::comma(round(admissions_m, 0))),
               vjust = 1.5, color = 'white') +
     labs(
-      title = paste0('UK admissions, January to ', data_and_vars$latest_month, ', million'),
+      title = paste0('UK admissions, January to ', data_and_vars$latest_month, ' (', 
+                      data_and_vars$latest_period, '), million'),
       subtitle = 'All titles on release, including event titles',
-      x = 'Year',
+      x = '',
       y = ''
     ) +
     scale_y_continuous(labels = scales::comma_format()) +

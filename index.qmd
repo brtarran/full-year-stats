@@ -54,7 +54,8 @@ In the UK in the period January to June (H1) 2025:
 
 
 sheet_name <- "uk_box_office"
-data_and_vars <- load_data(file_path, sheet_name)
+type <- "boxoffice"
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_box_office()
 ```
 
@@ -82,7 +83,7 @@ than in H1 2019.
 
 
 sheet_name <- 'uk_admissions'
-data_and_vars <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_admissions()
 ```
 </div>
@@ -136,7 +137,7 @@ down 20% on H1 2019.
 #| eval: true
 
 sheet_name <- 'uk_roi_box_office'
-data_and_vars <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_roi_box_office()
 ```
 
@@ -187,7 +188,7 @@ uk_market_share_indie()
 
 
 sheet_name <- 'uk_film_share'
-data_and_vars <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_market_share_percent()
 ```
 
