@@ -12,16 +12,19 @@ title-slide-attributes:
 execute: 
   echo: false
   warning: false
+  eval: false
 embed-resources: false
 ---
 
 ```{r}
 #| label: load-functions
 #| file: R/stats.R
+#| eval: true
 ```
 
 ```{r}
 #| label: set-file-path
+#| eval: true
 
 file_path <- here::here('data/bfi_stats_release_data.xlsx')
 ```
@@ -47,9 +50,11 @@ In the UK in the period January to June (H1) 2025:
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
-sheet_name <- 'uk_box_office'
-df <- load_data(file_path, sheet_name)
+
+sheet_name <- "uk_box_office"
+data_and_vars <- load_data(file_path, sheet_name)
 uk_box_office()
 ```
 
@@ -73,9 +78,11 @@ than in H1 2019.
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
+
 
 sheet_name <- 'uk_admissions'
-df <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name)
 uk_admissions()
 ```
 </div>
@@ -97,6 +104,7 @@ uk_admissions()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 uk_admissions_month()
 ```
@@ -125,9 +133,10 @@ down 20% on H1 2019.
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 sheet_name <- 'uk_roi_box_office'
-df <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name)
 uk_roi_box_office()
 ```
 
@@ -174,9 +183,11 @@ uk_market_share_indie()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
+
 
 sheet_name <- 'uk_film_share'
-df <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name)
 uk_market_share_percent()
 ```
 
