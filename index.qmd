@@ -568,9 +568,11 @@ production_breakdown_revised()
 
 ```{r}
 #| label: load-cert
+#| eval: true
 
 sheet_name <- 'certification'
-df <- load_data(file_path, sheet_name)
+type <- 'production'
+data_and_vars <- load_data(file_path, sheet_name, type)
 ```
 
 ##
@@ -592,6 +594,7 @@ In the 12 months to June 2025:
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'film'
 cert_status_select <- 'final'
@@ -618,6 +621,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'film'
 cert_status_select <- 'final'
@@ -644,6 +648,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'hetv'
 cert_status_select <- 'final'
@@ -669,6 +674,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'hetv'
 cert_status_select <- 'final'
@@ -694,6 +700,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'animation_tv'
 cert_status_select <- 'final'
@@ -719,6 +726,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'animation_tv'
 cert_status_select <- 'final'
@@ -745,6 +753,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'childrens_tv'
 cert_status_select <- 'final'
@@ -770,6 +779,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'childrens_tv'
 cert_status_select <- 'final'
@@ -796,6 +806,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'video_games'
 cert_status_select <- 'final'
@@ -822,6 +833,7 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 category_select <- 'video_games'
 cert_status_select <- 'final'
