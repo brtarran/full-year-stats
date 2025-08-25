@@ -198,9 +198,11 @@ uk_market_share_percent()
 
 ```{r}
 #| label: set-variables-spend
+#| eval: true
 
 sheet_name <- 'uk_production_detail'
-df <- load_data(file_path, sheet_name)
+type <- 'production'
+data_and_vars <- load_data(file_path, sheet_name, type)
 metric <- 'UK_spend_m'
 ```
 
@@ -223,6 +225,7 @@ In the UK, in the 12 months to June 2025:
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 all_production_first()
 ```
@@ -246,6 +249,7 @@ all_production_first()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 all_production_revised()
 ```
@@ -268,6 +272,7 @@ all_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
+#| eval: true
 
 film_hetv_production_revised()
 ```
