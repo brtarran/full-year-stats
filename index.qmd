@@ -12,19 +12,17 @@ title-slide-attributes:
 execute: 
   echo: false
   warning: false
-  eval: false
 embed-resources: false
 ---
 
 ```{r}
 #| label: load-functions
 #| file: R/stats.R
-#| eval: true
+
 ```
 
 ```{r}
 #| label: set-file-path
-#| eval: true
 
 file_path <- here::here('data/bfi_stats_release_data.xlsx')
 ```
@@ -50,8 +48,6 @@ In the UK in the period January to June (H1) 2025:
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
-
 
 sheet_name <- "uk_box_office"
 type <- "boxoffice"
@@ -79,8 +75,6 @@ than in H1 2019.
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
-
 
 sheet_name <- 'uk_admissions'
 data_and_vars <- load_data(file_path, sheet_name, type)
@@ -105,7 +99,6 @@ uk_admissions()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 uk_admissions_month()
 ```
@@ -134,7 +127,6 @@ down 20% on H1 2019.
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 sheet_name <- 'uk_roi_box_office'
 data_and_vars <- load_data(file_path, sheet_name, type)
@@ -184,8 +176,6 @@ uk_market_share_indie()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
-
 
 sheet_name <- 'uk_film_share'
 data_and_vars <- load_data(file_path, sheet_name, type)
@@ -198,7 +188,6 @@ uk_market_share_percent()
 
 ```{r}
 #| label: set-variables-spend
-#| eval: true
 
 sheet_name <- 'uk_production_detail'
 type <- 'production'
@@ -225,7 +214,6 @@ In the UK, in the 12 months to June 2025:
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 all_production_first()
 ```
@@ -249,7 +237,6 @@ all_production_first()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 all_production_revised()
 ```
@@ -272,7 +259,6 @@ all_production_revised()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 film_hetv_production_revised()
 ```
@@ -573,7 +559,6 @@ production_breakdown_revised()
 
 ```{r}
 #| label: load-cert
-#| eval: true
 
 sheet_name <- 'certification'
 type <- 'production'
@@ -599,7 +584,6 @@ In the 12 months to June 2025:
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'film'
 cert_status_select <- 'final'
@@ -626,7 +610,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'film'
 cert_status_select <- 'final'
@@ -653,7 +636,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'hetv'
 cert_status_select <- 'final'
@@ -679,7 +661,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'hetv'
 cert_status_select <- 'final'
@@ -705,7 +686,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'animation_tv'
 cert_status_select <- 'final'
@@ -731,7 +711,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'animation_tv'
 cert_status_select <- 'final'
@@ -758,7 +737,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'childrens_tv'
 cert_status_select <- 'final'
@@ -784,7 +762,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'childrens_tv'
 cert_status_select <- 'final'
@@ -811,7 +788,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'video_games'
 cert_status_select <- 'final'
@@ -838,7 +814,6 @@ certification()
 #| fig-height: 6
 #| fig-align: center
 #| fig-dpi: 150
-#| eval: true
 
 category_select <- 'video_games'
 cert_status_select <- 'final'
