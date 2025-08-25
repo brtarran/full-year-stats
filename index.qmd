@@ -18,6 +18,7 @@ embed-resources: false
 ```{r}
 #| label: load-functions
 #| file: R/stats.R
+
 ```
 
 ```{r}
@@ -48,8 +49,9 @@ In the UK in the period January to June (H1) 2025:
 #| fig-align: center
 #| fig-dpi: 150
 
-sheet_name <- 'uk_box_office'
-df <- load_data(file_path, sheet_name)
+sheet_name <- "uk_box_office"
+type <- "boxoffice"
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_box_office()
 ```
 
@@ -75,7 +77,7 @@ than in H1 2019.
 #| fig-dpi: 150
 
 sheet_name <- 'uk_admissions'
-df <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_admissions()
 ```
 </div>
@@ -127,7 +129,7 @@ down 20% on H1 2019.
 #| fig-dpi: 150
 
 sheet_name <- 'uk_roi_box_office'
-df <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_roi_box_office()
 ```
 
@@ -176,7 +178,7 @@ uk_market_share_indie()
 #| fig-dpi: 150
 
 sheet_name <- 'uk_film_share'
-df <- load_data(file_path, sheet_name)
+data_and_vars <- load_data(file_path, sheet_name, type)
 uk_market_share_percent()
 ```
 
@@ -188,7 +190,8 @@ uk_market_share_percent()
 #| label: set-variables-spend
 
 sheet_name <- 'uk_production_detail'
-df <- load_data(file_path, sheet_name)
+type <- 'production'
+data_and_vars <- load_data(file_path, sheet_name, type)
 metric <- 'UK_spend_m'
 ```
 
@@ -558,7 +561,8 @@ production_breakdown_revised()
 #| label: load-cert
 
 sheet_name <- 'certification'
-df <- load_data(file_path, sheet_name)
+type <- 'production'
+data_and_vars <- load_data(file_path, sheet_name, type)
 ```
 
 ##
